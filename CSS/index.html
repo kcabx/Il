@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>公安系统登录页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #005aab;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header img {
+            height: 50px;
+            vertical-align: middle;
+        }
+
+        .header h1 {
+            display: inline-block;
+            font-size: 28px;
+            margin-left: 10px;
+        }
+
+        .main-container {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .left-section {
+            width: 60%;
+            background: url('police-bg.jpg') no-repeat center;
+            background-size: cover;
+        }
+
+        .right-section {
+            width: 40%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-box {
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .login-box h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 40px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            background-size: 18px;
+            background-repeat: no-repeat;
+        }
+
+        .form-group:nth-child(1)::before {
+            background-image: url('user-icon.png');
+        }
+
+        .form-group:nth-child(2)::before {
+            background-image: url('Photo/lock-icon.png');
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #005aab;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #004a8b;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <img src="police-logo.png" alt="公安徽章">
+        <h1>庄浪县公安局人口信息管理平台（三维人口系统）</h1>
+    </div>
+
+    <div class="main-container">
+        <div class="left-section">
+            <div style="width: 100%; height: 300px; background: url('police-bg.jpg') no-repeat center; background-size: cover;"></div>
+        </div>
+        <div class="right-section">
+            <div class="login-box">
+                <h2>用户登录</h2>
+                <div class="form-group">
+                    <input type="text" placeholder="请输入用户名" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="请输入密码" required>
+                </div>
+                <button class="login-btn">登 录</button>
+                <p style="text-align: center; font-size: 12px; color: #ff6600; margin-top: 10px;">登录遇到问题，请联系管理员</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>版权所有：庄浪县公安局</p>
+        <p>建议环境：IE8及以上、360、谷歌、Firefox v22</p>
+        <p>技术支持：平凉市网络安全大队 联系电话：0933-8213021</p>
+    </div>
+</body>
+
+</html>

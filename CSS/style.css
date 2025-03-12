@@ -1,0 +1,47 @@
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url('https://api.suyanw.cn/api/comic3.php') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .glass-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 5%;
+            background-color: rgba(255, 255, 255, 0.2); /* 半透明背景 */
+            backdrop-filter: blur(10px); /* 创建毛玻璃效果 */
+            border-radius: 10px;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            text-align: center;
+            width: 80%;
+        }
+        .link-xx {
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(45deg, #1E90FF, #0000FF); /* 蓝色渐变渐变背景 */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            display: block;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+         h3 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #FFFFFF; /* 使用白色 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.0), 0 0 10px rgba(30,144,255, 0.0); /* 加强的阴影效果 */
+        }
+         .foottitle {
+            font-size: 1.0em;
+            margin-bottom: 20px;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.0); /* 加强的阴影效果 */
+        }

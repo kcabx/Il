@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>蟹老板_ShaoFa</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font: inherit;
+        }
+
+        html {
+            color: #333;
+            font-size: 62.5%;
+        }
+
+        @media screen and (max-width: 480px) {
+            html {
+                font-size: 50%;
+            }
+        }
+
+        body {
+            font-size: 2rem;
+            padding: 0;
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'Rubik', sans-serif;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        #stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .confirm,
+        .accepted,
+        .rejected {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 72rem;
+            max-width: 100%;
+            min-width: 34rem;
+            max-height: 100%;
+            height: 46rem;
+            background-color: #f0f0f0;
+            border-radius: 1rem;
+        }
+
+        .confirm-body,
+        .accepted-body,
+        .rejected-body {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            position: relative;
+            margin: 2rem 4rem;
+        }
+
+        .confirm-body-title,
+        .accepted-body-title,
+        .rejected-body-title {
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            transform: translateY(-50%);
+            top: 5%;
+            text-align: center;
+            width: 100%;
+        }
+
+        .confirm-body-subtitle,
+        .accepted-body-subtitle,
+        .rejected-body-subtitle {
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            transform: translateY(-50%);
+            top: 15%;
+            text-align: center;
+            width: 100%;
+            font-size: 1.5rem;
+        }
+
+        .confirm-body-button,
+        .confirm-body-button:link,
+        .confirm-body-button:visited,
+        .accepted-body-button,
+        .rejected-body-button {
+            color: #fff;
+            border-radius: 1rem;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            margin-bottom: 1rem;
+            min-width: 10rem;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .confirm-body-button-delete {
+            background-color: #a43;
+        }
+
+        .confirm-body-button-delete:hover {
+            background-color: #c85a48;
+        }
+
+        .confirm-body-button-cancel {
+            background-color: #6a4;
+        }
+
+        .confirm-body-button-cancel:hover {
+            background-color: #81c061;
+        }
+
+        .accepted-body-button,
+        .rejected-body-button {
+            background-color: #6a4;
+        }
+
+        .accepted-body-button:hover,
+        .rejected-body-button:hover {
+            background-color: #81c061;
+        }
+
+        .boi {
+            --happiness: 0.9;
+            --derp: 1;
+            --px: 0.5;
+            --py: 0.5;
+            width: 22rem;
+            max-width: 100%;
+            height: 22rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-image: radial-gradient(#f7e0b2, #eb5);
+            border-radius: 100%;
+            overflow: hidden;
+            margin: 0;
+            align-self: center;
+            flex: 0 0 auto;
+            border: solid 2px #ecb23e;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .boi,
+        .boi * {
+            position: absolute;
+        }
+
+        .boi::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: linear-gradient(to bottom, #5a8, rgba(85, 170, 136, 0));
+            opacity: calc(1 - var(--happiness));
+        }
+
+        .boi-blush {
+            width: 20%;
+            height: 10%;
+            background-color: rgba(255, 100, 100, 0.3);
+            border: 3px solid rgba(255, 100, 100, 0.3);
+            top: calc(45% + var(--py) * 10%);
+            border-radius: 100%;
+            opacity: calc(var(--happiness) * var(--happiness) * 0.9 + 0.1);
+        }
+
+        .boi-blush-left {
+            left: calc(7% + var(--px) * 2%);
+        }
+
+        .boi-blush-right {
+            right: calc(9% - var(--px) * 2%);
+        }
+
+        .boi-eye {
+            width: calc(26% - var(--happiness) * 2%);
+            height: calc(26% - var(--happiness) * 2%);
+            background-color: #f6f6f6;
+            border-radius: 100%;
+            top: calc(25% + var(--py) * 10%);
+            overflow: hidden;
+        }
+
+        .boi-eye-left {
+            left: calc(18% + var(--px) * 4%);
+        }
+
+        .boi-eye-left::after {
+            transform: translate(calc((var(--px) + var(--derp) * 0.5) * 100%), calc((var(--py) + var(--derp) * 0.5) * 100%));
+        }
+
+        .boi-eye-right {
+            right: calc(22% - var(--px) * 4%);
+        }
+
+        .boi-eye-right::after {
+            transform: translate(calc((var(--px) + var(--derp) * -0.3) * 100%), calc((var(--py) + var(--derp) * -0.3) * 100%));
+        }
+
+        .boi-eye::after {
+            content: '';
+            display: block;
+            background-color: #421;
+            width: calc(55% - var(--happiness) * 10%);
+            height: calc(55% - var(--happiness) * 10%);
+            border-radius: 100%;
+        }
+
+        .boi-mouth {
+            width: calc(51% - var(--happiness) * 2%);
+            height: calc(26% - var(--happiness) * 2%);
+            background-color: #a33;
+            border-radius: calc((1 - var(--happiness)) * 10em) calc((1 - var(--happiness)) * 10em) calc(var(--happiness) * 16em) calc(var(--happiness) * 16em);
+            top: calc(57.5% + var(--py) * 5%);
+            left: calc(47.5% + var(--px) * 5%);
+            transform: translateX(-50%);
+            overflow: hidden;
+            border: 3px solid #962d2d;
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
+        }
+
+        .boi-mouth::before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 20%;
+            height: 20%;
+            top: 0;
+            left: 50%;
+            background-color: white;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+
+        .boi-mouth::after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 60%;
+            height: 50%;
+            left: 10%;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 20rem 20rem 0 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 新增UI样式
+         前面颜色是左半部分的渐变色，右边是右半部分的*/
+        .love-alert {
+            background: linear-gradient(135deg, #cbcbc9, #cbcbc9);
+            box-shadow: 0 4px 12px rgba(255, 102, 102, 0.3);
+        }
+
+        .love-alert .confirm-body-title {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .love-alert .confirm-body-subtitle {
+            color: #ffffff;
+            opacity: 0.9;
+        }
+
+        .love-alert .confirm-body-button-cancel {
+            background-color: #2ecc71;
+            border: 2px solid #27ae60;
+        }
+
+        .love-alert .confirm-body-button-delete {
+            background-color: #e74c3c;
+            border: 2px solid #c0392b;
+        }
+
+        .love-alert .boi {
+            background-image: radial-gradient(#ffd700, #ffd700);
+            border-color: #ffd700;
+        }
+
+        .love-alert .boi::before {
+            background-image: linear-gradient(to bottom, #ff6b6b, rgba(255, 102, 102, 0));
+        }
+
+        .love-alert .boi-blush {
+            background-color: rgba(255, 100, 100, 0.5);
+            border-color: rgba(255, 100, 100, 0.5);
+        }
+
+        .love-alert .accepted-body,
+        .love-alert .rejected-body {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .love-alert .accepted-body-button,
+        .love-alert .rejected-body-button {
+            background-color: #ffffff;
+            color: #2ecc71;
+            border: 2px solid #2ecc71;
+        }
+
+        .love-alert .accepted-body-button:hover,
+        .love-alert .rejected-body-button:hover {
+            background-color: #2ecc71;
+            color: #ffffff;
+        }
+    </style>
+    <script>
+        var context;
+        var arr = new Array();
+        var starCount = 800;
+        var rains = new Array();
+        var rainCount = 20;
+
+        function init() {
+            var stars = document.getElementById("stars");
+            windowWidth = window.innerWidth;
+            stars.width = windowWidth;
+            stars.height = window.innerHeight;
+            context = stars.getContext("2d");
+        }
+
+        // 创建一个星星对象
+        var Star = function () {
+            this.x = windowWidth * Math.random();
+            this.y = 5000 * Math.random();
+            this.text = ".";
+            this.color = "#fff";
+            this.getColor = function () {
+                var _r = Math.random();
+                if (_r < 0.5) {
+                    this.color = "#333";
+                } else {
+                    this.color = "#fff";
+                }
+            }
+            // 初始化
+            this.init = function () {
+                this.getColor();
+            }
+            // 绘制
+            this.draw = function () {
+                context.fillStyle = this.color;
+                context.fillText(this.text, this.x, this.y);
+            }
+        }
+
+        // 画月亮
+        function drawMoon() {
+            var moon = new Image();
+            moon.src = "Photo/moon.jpg";
+            context.drawImage(moon, -5, -10);
+        }
+
+        // 页面加载的时候
+        window.onload = function () {
+            init();
+            // 画星星
+            for (var i = 0; i < starCount; i++) {
+                var star = new Star();
+                star.init();
+                star.draw();
+                arr.push(star);
+            }
+            // 画流星
+            for (var i = 0; i < rainCount; i++) {
+                var rain = new MeteorRain();
+                rain.init();
+                rain.draw();
+                rains.push(rain);
+            }
+            drawMoon();
+            playStars();
+            playRains();
+
+            // 行动派部分代码逻辑
+            const confirmSection = document.querySelector('.confirm');
+            const acceptedSection = document.querySelector('.accepted');
+            const rejectedSection = document.querySelector('.rejected');
+            const boi = document.querySelector('.boi');
+            const btnDelete = document.querySelector('.confirm-body-button-delete');
+            const btnCancel = document.querySelector('.confirm-body-button-cancel');
+            const current = {
+                happiness: 0.9,
+                derp: 1,
+                px: 0.5,
+                py: 0.5
+            };
+            const target = { ...current };
+
+            // 事件监听
+            confirmSection.addEventListener('mousemove', onMouseMove);
+            confirmSection.addEventListener('mouseleave', onMouseLeave);
+
+            btnCancel.addEventListener('click', () => {
+                confirmSection.classList.add('hidden');
+                acceptedSection.classList.remove('hidden');
+            });
+
+            btnDelete.addEventListener('click', () => {
+                confirmSection.classList.add('hidden');
+                rejectedSection.classList.remove('hidden');
+            });
+
+            acceptedSection.querySelector('a').addEventListener('click', () => {
+                acceptedSection.classList.add('hidden');
+                confirmSection.classList.remove('hidden');
+            });
+
+            rejectedSection.querySelector('a').addEventListener('click', () => {
+                rejectedSection.classList.add('hidden');
+                confirmSection.classList.remove('hidden');
+            });
+
+            function onMouseMove({ clientX: x, clientY: y }) {
+                let dx1 = x - btnDelete.getBoundingClientRect().x - btnDelete.getBoundingClientRect().width * 0.5;
+                let dy1 = y - btnDelete.getBoundingClientRect().y - btnDelete.getBoundingClientRect().height * 0.5;
+                let dx2 = x - btnCancel.getBoundingClientRect().x - btnCancel.getBoundingClientRect().width * 0.5;
+                let dy2 = y - btnCancel.getBoundingClientRect().y - btnCancel.getBoundingClientRect().height * 0.5;
+                let px = (x - confirmSection.getBoundingClientRect().x) / confirmSection.getBoundingClientRect().width;
+                let py = (y - confirmSection.getBoundingClientRect().y) / confirmSection.getBoundingClientRect().height;
+                let distDelete = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+                let distCancel = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+                let happiness = Math.pow(distDelete / (distCancel + distDelete), 0.75);
+
+                target.happiness = happiness;
+                target.derp = 0;
+                target.px = px;
+                target.py = py;
+            }
+
+            function onMouseLeave() {
+                target.happiness = 0.9;
+                target.derp = 1;
+                target.px = 0.5;
+                target.py = 0.5;
+            }
+
+            function update() {
+                for (let prop in target) {
+                    if (target[prop] === current[prop]) {
+                        continue;
+                    } else if (Math.abs(target[prop] - current[prop]) < 0.01) {
+                        current[prop] = target[prop];
+                    } else {
+                        current[prop] += (target[prop] - current[prop]) * 0.1;
+                    }
+                    boi.style.setProperty(`--${prop}`, current[prop]);
+                }
+                requestAnimationFrame(update);
+            }
+            update();
+        }
+
+        // 星星闪起来
+        function playStars() {
+            for (var n = 0; n < starCount; n++) {
+                arr[n].getColor();
+                arr[n].draw();
+            }
+
+            setTimeout("playStars()", 100);
+        }
+
+        /* 流星雨开始 */
+        var MeteorRain = function () {
+            this.x = -1;
+            this.y = -1;
+            this.length = -1; // 长度
+            this.angle = 30; // 倾斜角度
+            this.width = -1; // 宽度
+            this.height = -1; // 高度
+            this.speed = 1; // 速度
+            this.offset_x = -1; // 横轴移动偏移量
+            this.offset_y = -1; // 纵轴移动偏移量
+            this.alpha = 1; // 透明度
+            this.color1 = ""; // 流星的色彩
+            this.color2 = ""; // 流星的色彩
+
+            /****************初始化函数********************/
+            this.init = function () // 初始化
+            {
+                this.getPos();
+                this.alpha = 1; // 透明度
+                this.getRandomColor();
+                // 最小长度，最大长度
+                var x = Math.random() * 80 + 150;
+                this.length = Math.ceil(x);
+                // x = Math.random()*10+30;
+                this.angle = 30; // 流星倾斜角
+                x = Math.random() + 0.5;
+                this.speed = Math.ceil(x); // 流星的速度
+                var cos = Math.cos(this.angle * 3.14 / 180);
+                var sin = Math.sin(this.angle * 3.14 / 180);
+                this.width = this.length * cos; // 流星所占宽度
+                this.height = this.length * sin; // 流星所占高度
+                this.offset_x = this.speed * cos;
+                this.offset_y = this.speed * sin;
+            }
+
+            /**************获取随机颜色函数*****************/
+            this.getRandomColor = function () {
+                var a = Math.ceil(255 - 240 * Math.random());
+                // 中段颜色
+                this.color1 = "rgba(" + a + "," + a + "," + a + ",1)";
+                // 结束颜色
+                this.color2 = "black";
+            }
+
+            /***************重新计算流星坐标的函数******************/
+            this.countPos = function () //
+            {
+                // 往左下移动,x减少，y增加
+                this.x = this.x - this.offset_x;
+                this.y = this.y + this.offset_y;
+            }
+
+            /*****************获取随机坐标的函数*****************/
+            this.getPos = function () //
+            {
+                // 横坐标200--1200
+                this.x = Math.random() * window.innerWidth; // 窗口高度
+                // 纵坐标小于600
+                this.y = Math.random() * window.innerHeight; // 窗口宽度
+            }
+
+            /****绘制流星***************************/
+            this.draw = function () // 绘制一个流星的函数
+            {
+                context.save();
+                context.beginPath();
+                context.lineWidth = 1; // 宽度
+                context.globalAlpha = this.alpha; // 设置透明度
+                // 创建横向渐变颜色,起点坐标至终点坐标
+                var line = context.createLinearGradient(this.x, this.y,
+                    this.x + this.width,
+                    this.y - this.height);
+                // 分段设置颜色
+                line.addColorStop(0, "white");
+                line.addColorStop(0.3, this.color1);
+                line.addColorStop(0.6, this.color2);
+                context.strokeStyle = line;
+                // 起点
+                context.moveTo(this.x, this.y);
+                // 终点
+                context.lineTo(this.x + this.width, this.y - this.height);
+                context.closePath();
+                context.stroke();
+                context.restore();
+            }
+
+            this.move = function () {
+                var x = this.x + this.width - this.offset_x;
+                var y = this.y - this.height;
+                context.clearRect(x - 3, y - 3, this.offset_x + 5, this.offset_y + 5);
+                this.countPos();
+                this.alpha -= 0.002;
+                this.draw();
+            }
+        }
+
+        // 绘制流星
+        function playRains() {
+            for (var n = 0; n < rainCount; n++) {
+                var rain = rains[n];
+                rain.move();
+                if (rain.y > window.innerHeight) {
+                    context.clearRect(rain.x, rain.y - rain.height, rain.width, rain.height);
+                    rains[n] = new MeteorRain();
+                    rains[n].init();
+                }
+            }
+            setTimeout("playRains()", 2);
+        }
+    </script>
+</head>
+
+<body>
+    <canvas id="stars"></canvas>
+    <!-- 初始界面 -->
+    <section class="confirm love-alert">
+        <div class="confirm-body">
+            <figure class="boi" style="--happiness:0.9; --derp:1; --px:0.5; --py:0.5;">
+                <div class="boi-blush boi-blush-left"></div>
+                <div class="boi-blush boi-blush-right"></div>
+                <div class="boi-eye boi-eye-left"></div>
+                <div class="boi-eye boi-eye-right"></div>
+                <div class="boi-mouth"></div>
+            </figure>
+            <a class="confirm-body-button confirm-body-button-cancel" href="javascript:void(0)">接受</a>
+            <a class="confirm-body-button confirm-body-button-delete" href="javascript:void(0)">拒绝</a>
+        </div>
+    </section>
+
+    <!-- 接受后的新界面 -->
+    <section class="accepted hidden">
+        <div class="accepted-body">
+            <h2 class="accepted-body-title">超开心被你接住啦！</h2>
+            <h3 class="accepted-body-subtitle">以后的日子，就让我们一起解锁更多甜蜜，把幸福拉满～</h3>
+            <figure class="boi" style="--happiness:1; --derp:0; --px:0.5; --py:0.5;">
+                <div class="boi-blush boi-blush-left"></div>
+                <div class="boi-blush boi-blush-right"></div>
+                <div class="boi-eye boi-eye-left"></div>
+                <div class="boi-eye boi-eye-right"></div>
+                <div class="boi-mouth"></div>
+            </figure>
+            <a class="accepted-body-button" href="javascript:void(0)">返回</a>
+        </div>
+    </section>
+
+    <!-- 拒绝后的新界面 -->
+    <section class="rejected hidden">
+        <div class="rejected-body">
+            <h2 class="rejected-body-title">有点小失落呢～</h2>
+            <h3 class="rejected-body-subtitle">不过我依然觉得你超棒！无论怎样，都希望你每天开心，未来也期待能有更多美好故事～</h3>
+            <figure class="boi" style="--happiness:0.2; --derp:0; --px:0.5; --py:0.5;">
+                <div class="boi-blush boi-blush-left"></div>
+                <div class="boi-blush boi-blush-right"></div>
+                <div class="boi-eye boi-eye-left"></div>
+                <div class="boi-eye boi-eye-right"></div>
+                <div class="boi-mouth"></div>
+            </figure>
+            <a class="rejected-body-button" href="javascript:void(0)">返回</a>
+        </div>
+    </section>
+</body>
+
+</html>

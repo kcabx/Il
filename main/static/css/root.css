@@ -69,7 +69,7 @@ html {
 
     /*图片模糊背景＋白色透明卡片+黑色svg*/
     --name: 主题2;
-    --main_bg_color: url(../img/background.jpg);
+    --main_bg_color: url();
     --main_text_color: #000000;
     --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
     --purple_text_color: #747bff;

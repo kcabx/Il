@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr.Krabs整合资源</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', sans-serif;
+        }
+        body {
+            background-image: url('../Photo/back.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            height: 3px;
+            width: 100px;
+            margin-top: 10px;
+            background: linear-gradient(90deg, #8c54e9, #4a90e2);
+        }
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .app-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            margin: 10px auto;
+            background-size: cover;
+            border-radius: 10px;
+        }
+        .app-name {
+            font-size: 16px;
+            color: #e0e0e0;
+            margin: 5px 0;
+        }
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .contact-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        .contact-btn img {
+            width: 24px;
+            height: 24px;
+            filter: invert(1);
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff,#ff00ff );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        .highlight {
+            color: #ff00ff;
+            font-weight: 500;
+        }
+        .resource-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .resource-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        .card-title {
+            font-size: 18px;
+            color: #e0e0e0;
+            margin-bottom: 10px;
+        }
+        .tool-btn {
+            display: block;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 8px 12px;
+            margin: 5px 0;
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .tool-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .tool-list {
+            display: none;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+        }
+        .popup img {
+            max-width: 300px;
+            max-height: 300px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2 class="section-title gradient-text">Mr.Krabs 温馨提示</h2>
+            <div class="content-item">
+                作者能力有限，只会 Kali Linux、Python、Pycharm、Html5、Css、JavaScript、Blender、FactoryIO...打不开就是未添加
+            </div>
+            <div class="content-item">
+                已安装过服务器容量 10T，存储了大量<span class="highlight">照片、视频、工作文件</span>等，所以网站不会部署到服务器
+            </div>
+            <div class="content-item">
+                所有<span class="highlight">表白</span>工具均可按照情况<span class="highlight">免费</span>定制文字内容、展示效果、链接...如有需要请联系<span class="highlight">开发者</span>
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <a href="../Photo/qq.jpg" class="contact-btn show-popup">
+                    <img src="../Photo/qq.png" alt="QQ">
+                </a>
+                <a href="../Photo/wx.jpg" class="contact-btn show-popup">
+                    <img src="../Photo/wx.png" alt="WeChat">
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="section-title gradient-text">编程开发资源代码</h2>
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <h3 class="card-title">Python 好玩工具</h3>
+                    <div class="tool-list">
+                        <a href="#" class="tool-btn">3D爱心-表白</a>
+                        <a href="#" class="tool-btn">QQ自动发消息-消息轰炸</a>
+                        <a href="#" class="tool-btn">微信自动发消息-消息轰炸</a>
+                        <a href="#" class="tool-btn">网页爬虫-爬取网页源码</a>
+                        <a href="#" class="tool-btn">待添加......</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <h3 class="card-title">Html5 好玩告白工具</h3>
+                    <div class="tool-list">
+                        <a href="../行动派.html" class="tool-btn">行动派-预览效果</a>
+                        <a href="../main.html" class="tool-btn">粒子动画-预览效果</a>
+                        <a href="kyzwlrm.html" class="tool-btn">可以做我恋人吗</a>
+                        <a href="3dphoto.html" class="tool-btn">3D相册恋人照片</a>
+                        <a href="#" class="tool-btn">待添加......</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <h3 class="card-title">Html5 玩机工具</h3>
+                    <div class="tool-list">
+                        <a href="about.html" class="tool-btn">毛玻璃登陆页面</a>
+                        <a href="sz.html" class="tool-btn">古罗盘时钟...</a>
+                        <a href="#" class="tool-btn">待添加...</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <h3 class="card-title">网络嗅探侦测</h3>
+                    <div class="tool-list">
+                        <a href="#" class="tool-btn">待添加...</a>
+                        <a href="#" class="tool-btn">待添加...</a>
+                        <a href="#" class="tool-btn">待添加...</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <h3 class="card-title">开发编程工具</h3>
+                    <div class="tool-list">
+                        <a href="#" class="tool-btn">待添加...</a>
+                        <a href="#" class="tool-btn">待添加...</a>
+                        <a href="#" class="tool-btn">待添加...</a>
+                        <a href="#" class="tool-btn">待添加...</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <h3 class="card-title">AI工具</h3>
+                    <div class="tool-list">
+                        <a href="#" class="tool-btn">待添加...</a>
+                        <a href="#" class="tool-btn">待添加...</a>
+                        <a href="#" class="tool-btn">待添加...</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新增的分类模块 -->
+        <div class="card">
+            <h2 class="section-title gradient-text">其他实用工具</h2>
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <h3 class="card-title">系统维护工具</h3>
+                    <div class="tool-list">
+                        <a href="#" class="tool-btn">磁盘清理工具</a>
+                        <a href="#" class="tool-btn">注册表优化工具</a>
+                        <a href="#" class="tool-btn">进程监控工具</a>
+                        <a href="#" class="tool-btn">系统备份工具</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <h3 class="card-title">网络管理工具</h3>
+                    <div class="tool-list">
+                        <a href="#" class="tool-btn">网络速度测试</a>
+                        <a href="#" class="tool-btn">端口扫描工具</a>
+                        <a href="#" class="tool-btn">路由追踪工具</a>
+                        <a href="#" class="tool-btn">DNS解析工具</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <h3 class="card-title">多媒体处理</h3>
+                    <div class="tool-list">
+                        <a href="#" class="tool-btn">视频格式转换</a>
+                        <a href="#" class="tool-btn">音频提取工具</a>
+                        <a href="#" class="tool-btn">图片压缩工具</a>
+                        <a href="#" class="tool-btn">屏幕录制工具</a>
+                    </div>
+                </div>
+                <div class="resource-card">
+                    <h3 class="card-title">办公辅助工具</h3>
+                    <div class="tool-list">
+                        <a href="#" class="tool-btn">PDF转换器</a>
+                        <a href="#" class="tool-btn">文档加密工具</a>
+                        <a href="#" class="tool-btn">数据恢复工具</a>
+                        <a href="#" class="tool-btn">待添加...</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popup">
+        <img src="" alt="Popup Image">
+        <button class="close-btn">&times;</button>
+    </div>
+    <script>
+        // 处理资源卡片的展开/收缩功能
+        const resourceCards = document.querySelectorAll('.resource-card');
+        resourceCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const toolList = card.querySelector('.tool-list');
+                if (toolList.style.display === 'none') {
+                    toolList.style.display = 'block';
+                } else {
+                    toolList.style.display = 'none';
+                }
+            });
+        });
+        // 处理微信和 QQ 图片弹出窗口
+        const showPopupButtons = document.querySelectorAll('.show-popup');
+        const popup = document.querySelector('.popup');
+        const popupImage = popup.querySelector('img');
+        const closeButton = popup.querySelector('.close-btn');
+        showPopupButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const imageSrc = button.getAttribute('href');
+                popupImage.src = imageSrc;
+                popup.style.display = 'block';
+            });
+        });
+        closeButton.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

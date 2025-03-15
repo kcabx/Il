@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <title>Mr.Krabs3D恋人相册</title>
+    <style type="text/css">
+        * { margin: 0; padding: 0; }
+		body{
+			background: url('../Photo/04.jpeg') no-repeat center center fixed;
+			background-size: cover;  /* 确保背景图片充满整个屏幕 */
+			/* background:#222; */
+			perspective:800px;/*景深*/
+		}
+        /* @keyframes oceanAnimation {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        } */
+        #wrap{
+			position:relative;
+			width:120px;
+			height:180px;
+			margin:auto;
+			transform-style:preserve-3d;/*设置3D环境*/
+		}
+		#wrap img{
+			position:absolute;
+			width:133px;
+			height:200px;
+			box-shadow:0 0 10px #000;
+			/*倒影:朝向 偏移*/
+			-webkit-box-reflect:below 5px -webkit-linear-gradient(top,rgba(0,0,0,0) 40%,rgba(0,0,0,.5) 100%);
+			border-radius:5px;/*圆角*/
+			/* transform:rotateY(0deg) translateZ(0px); */
+			/*transition:1s 1s;动画执行的时间 动画延迟的时间*/
+		}
+		#wrap p{
+			position:absolute;
+			left:50%;
+			top:112%;
+			margin-left:-600px;
+			margin-top:-600px;
+			width:1200px;
+			height:1200px;
+			border-radius:50%;
+			background:-webkit-radial-gradient(center center,600px 600px,rgba(122,122,122,0.2),rgba(0,0,0,0));
+			transform:rotateX(90deg);
+		}
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <img src="../Photo/1.jpg" alt="" />
+        <img src="../Photo/2.jpg" alt="" />
+        <img src="../Photo/3.jpg" alt="" />
+        <img src="../Photo/4.jpg" alt="" />
+        <img src="../Photo/5.jpg" alt="" />
+        <img src="../Photo/6.jpg" alt="" />
+        <img src="../Photo/7.jpg" alt="" />
+        <img src="../Photo/8.jpg" alt="" />
+        <img src="../Photo/9.jpg" alt="" />
+        <img src="../Photo/10.jpg" alt="" />
+        <img src="../Photo/11.jpg" alt="" />
+        <p></p>
+    </div>
+    <script type="text/javascript">
+        var oWrap = document.getElementById("wrap");
+        var aImg = oWrap.getElementsByTagName("img");
+        //让盒子自适应的垂直居中
+        function mTop(){
+            var H = document.documentElement.clientHeight;
+            oWrap.style.marginTop = H/2 - 180 + "px";
+        }
+        mTop();
+        window.onresize = mTop;
+
+        var len = aImg.length;
+        var Deg = 360 / len;
+        for (var i = 0; i < len; i++) {
+            aImg[i].style.transform = "rotateY(" + i * Deg + "deg) translateZ(350px)";
+            aImg[i].style.transition = "1s " + (len - 1 - i) * 0.1 + "s";
+        }
+
+        var lastX, lastY, nowX, nowY, minX, minY, roX = 0, roY = 0, timer;
+        document.onmousedown = function (ev) {
+            clearInterval(timer);
+            var ev = ev || window.event;
+            lastX = ev.clientX;
+            lastY = ev.clientY;
+            this.onmousemove = function (ev) {
+                var ev = ev || window.event;
+                nowX = ev.clientX;
+                nowY = ev.clientY;
+                minX = nowX - lastX;
+                minY = nowY - lastY;
+                roY += minX * 0.2;
+                roX -= minY * 0.1;
+                oWrap.style.transform = "rotateX(" + roX + "deg) rotateY(" + roY + "deg)";
+                lastX = nowX;
+                lastY = nowY;
+            };
+            this.onmouseup = function () {
+                this.onmousemove = null;
+                this.onmouseup = null;
+                timer = setInterval(function () {
+                    minX *= 0.95;
+                    minY *= 0.95;
+                    roY += minX * 0.2;
+                    roX -= minY * 0.1;
+                    oWrap.style.transform = "rotateX(" + roX + "deg) rotateY(" + roY + "deg)";
+                    if (Math.abs(minX) < 0.1 && Math.abs(minY) < 0.1) {
+                        clearInterval(timer);
+                    }
+                }, 1000 / 60);
+            };
+            return false;
+        }
+    </script>
+</body>
+</html>

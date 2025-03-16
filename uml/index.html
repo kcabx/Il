@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,18 +12,34 @@
             box-sizing: border-box;
             font-family: 'SF Pro Display', sans-serif;
         }
+
         body {
-            background-image: url('../Photo/back.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background: linear-gradient(45deg, #ffb6c1, #add8e6, #90ee90, #da70d6);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
             line-height: 1.6;
         }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
+
         .card {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
@@ -33,15 +50,18 @@
             margin: 20px 0;
             transition: transform 0.3s ease;
         }
+
         .card:hover {
             transform: translateY(-10px);
         }
+
         .section-title {
             font-size: 28px;
             margin-bottom: 20px;
-            color: #e0e0e0;
+            color: #333333;
             position: relative;
         }
+
         .section-title::after {
             content: '';
             display: block;
@@ -50,11 +70,13 @@
             margin-top: 10px;
             background: linear-gradient(90deg, #8c54e9, #4a90e2);
         }
+
         .resource-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
         }
+
         .app-card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
@@ -62,10 +84,12 @@
             text-align: center;
             transition: all 0.3s ease;
         }
+
         .app-card:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-5px);
         }
+
         .app-icon {
             width: 60px;
             height: 60px;
@@ -73,11 +97,13 @@
             background-size: cover;
             border-radius: 10px;
         }
+
         .app-name {
             font-size: 16px;
-            color: #e0e0e0;
+            color: #666666;
             margin: 5px 0;
         }
+
         .contact-btn {
             display: inline-flex;
             align-items: center;
@@ -90,10 +116,12 @@
             transition: all 0.3s ease;
             position: relative;
         }
+
         .contact-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: scale(1.05);
         }
+
         .contact-btn::before {
             content: '';
             position: absolute;
@@ -106,21 +134,25 @@
             border-radius: 50%;
             z-index: -1;
         }
+
         .contact-btn img {
             width: 24px;
             height: 24px;
-            filter: invert(1);
+            filter: none;
         }
+
         .gradient-text {
-            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff,#ff00ff );
+            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff00ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: bold;
         }
+
         .highlight {
             color: #ff00ff;
             font-weight: 500;
         }
+
         .resource-card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
@@ -128,31 +160,48 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
+
         .resource-card:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-5px);
         }
+
         .card-title {
             font-size: 18px;
-            color: #e0e0e0;
             margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff4500, #ff0000);
+            background-size: 400% 400%;
+            animation: textGradient 15s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+
         .tool-btn {
             display: block;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
             padding: 8px 12px;
             margin: 5px 0;
-            color: #e0e0e0;
             text-decoration: none;
             transition: all 0.3s ease;
+            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff4500, #ff0000);
+            background-size: 400% 400%;
+            animation: textGradient 15s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
         }
+
         .tool-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            -webkit-text-fill-color: #fff;
         }
+
         .tool-list {
             display: none;
+            margin-top: 10px;
         }
+
         .popup {
             display: none;
             position: fixed;
@@ -164,10 +213,12 @@
             border-radius: 10px;
             z-index: 1000;
         }
+
         .popup img {
             max-width: 300px;
             max-height: 300px;
         }
+
         .close-btn {
             position: absolute;
             top: 10px;
@@ -177,8 +228,28 @@
             font-size: 20px;
             cursor: pointer;
         }
+
+        @keyframes textGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 新增鼠标悬停显示工具列表的样式 */
+        .resource-card:hover .tool-list {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="card">
@@ -259,8 +330,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- 新增的分类模块 -->
         <div class="card">
             <h2 class="section-title gradient-text">其他实用工具</h2>
             <div class="resource-grid">
@@ -282,60 +351,52 @@
                         <a href="#" class="tool-btn">DNS解析工具</a>
                     </div>
                 </div>
-                <div class="resource-card">
-                    <h3 class="card-title">多媒体处理</h3>
-                    <div class="tool-list">
-                        <a href="#" class="tool-btn">视频格式转换</a>
-                        <a href="#" class="tool-btn">音频提取工具</a>
-                        <a href="#" class="tool-btn">图片压缩工具</a>
-                        <a href="#" class="tool-btn">屏幕录制工具</a>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <h3 class="card-title">办公辅助工具</h3>
-                    <div class="tool-list">
-                        <a href="#" class="tool-btn">PDF转换器</a>
-                        <a href="#" class="tool-btn">文档加密工具</a>
-                        <a href="#" class="tool-btn">数据恢复工具</a>
-                        <a href="#" class="tool-btn">待添加...</a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
     <div class="popup">
-        <img src="" alt="Popup Image">
-        <button class="close-btn">&times;</button>
+        <span class="close-btn">&times;</span>
+        <img src="" alt="二维码">
     </div>
     <script>
-        // 处理资源卡片的展开/收缩功能
-        const resourceCards = document.querySelectorAll('.resource-card');
-        resourceCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const toolList = card.querySelector('.tool-list');
-                if (toolList.style.display === 'none') {
-                    toolList.style.display = 'block';
-                } else {
-                    toolList.style.display = 'none';
+        document.addEventListener('DOMContentLoaded', function () {
+            const resourceCards = document.querySelectorAll('.resource-card');
+            resourceCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    const toolList = this.querySelector('.tool-list');
+                    if (toolList.style.display === 'none') {
+                        toolList.style.display = 'block';
+                    } else {
+                        toolList.style.display = 'none';
+                    }
+                });
+            });
+
+            const showPopupLinks = document.querySelectorAll('.show-popup');
+            const popup = document.querySelector('.popup');
+            const closeBtn = document.querySelector('.close-btn');
+            const popupImg = document.querySelector('.popup img');
+
+            showPopupLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const imgSrc = this.getAttribute('href');
+                    popupImg.src = imgSrc;
+                    popup.style.display = 'block';
+                });
+            });
+
+            closeBtn.addEventListener('click', function () {
+                popup.style.display = 'none';
+            });
+
+            window.addEventListener('click', function (e) {
+                if (e.target === popup) {
+                    popup.style.display = 'none';
                 }
             });
         });
-        // 处理微信和 QQ 图片弹出窗口
-        const showPopupButtons = document.querySelectorAll('.show-popup');
-        const popup = document.querySelector('.popup');
-        const popupImage = popup.querySelector('img');
-        const closeButton = popup.querySelector('.close-btn');
-        showPopupButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const imageSrc = button.getAttribute('href');
-                popupImage.src = imageSrc;
-                popup.style.display = 'block';
-            });
-        });
-        closeButton.addEventListener('click', () => {
-            popup.style.display = 'none';
-        });
     </script>
 </body>
+
 </html>

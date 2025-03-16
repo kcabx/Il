@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr.Krabs整合资源</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', sans-serif;
+        }
+
+        body {
+            /* 修改为背景图片 */
+            background-image: url('../Photo/backjped.jpg');
+            background-size: cover; /* 让图片覆盖整个背景 */
+            background-position: center; /* 图片居中显示 */
+            background-repeat: no-repeat; /* 不重复显示图片 */
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            height: 3px;
+            width: 100px;
+            margin-top: 10px;
+            background: linear-gradient(90deg, #8c54e9, #4a90e2);
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* 照片展示网格，一行展示6个 */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+        }
+
+        /* 视频展示网格，一行放四个 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .app-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            margin: 10px auto;
+            background-size: cover;
+            border-radius: 10px;
+        }
+
+        .app-name {
+            font-size: 16px;
+            color: #666666;
+            margin: 5px 0;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .contact-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .contact-btn img {
+            width: 24px;
+            height: 24px;
+            filter: none;
+        }
+        /* 新增弹窗相关样式 */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    position: relative;
+    max-width: 80%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.popup-img {
+    max-width: 300px;
+    max-height: 300px;
+    display: block;
+    margin: 0 auto;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: #ff4757;
+}
+
+/* 修改原有按钮样式 */
+.contact-btn {
+    cursor: pointer;
+    text-decoration: none !important;
+}
+
+        /* 修改原有的.gradient-text类 */
+    .gradient-text {
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96c93d, #ffd700);
+        background-size: 400% 400%;
+        animation: gradientFlow 8s ease infinite;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* 新增流光动画 */
+    @keyframes gradientFlow {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* 优化标题样式 */
+    .section-title {
+        font-size: 32px;
+        margin-bottom: 25px;
+        display: inline-block;
+        padding: 0 20px;
+        transition: all 0.3s ease;
+    }
+
+    /* 添加标题悬停效果 */
+    .section-title:hover {
+        transform: scale(1.05);
+        text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+        .highlight {
+            color: #ff00ff;
+            font-weight: 500;
+        }
+
+        .resource-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff4500, #ff0000);
+            background-size: 400% 400%;
+            animation: textGradient 15s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tool-btn {
+            display: block;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 8px 12px;
+            margin: 5px 0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff4500, #ff0000);
+            background-size: 400% 400%;
+            animation: textGradient 15s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .tool-btn:hover {
+            background: rgba(0, 0, 0, 0.3);
+            -webkit-text-fill-color: #fff;
+        }
+
+        .tool-list {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+        }
+
+        .popup img {
+            max-width: 300px;
+            max-height: 300px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @keyframes textGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 新增鼠标悬停显示工具列表的样式 */
+        .resource-card:hover .tool-list {
+            display: block;
+        }
+
+        /* 照片和视频卡片样式 */
+        /* 新增图片容器固定宽高比样式 */
+        .media-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .media-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 10px;
+        }
+
+        /* 修复视频容器尺寸问题 */
+        .media-card video {
+            width: 100%;
+            height: 200px; /* 固定视频高度 */
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        /* 移除冲突的CSS属性 */
+        .media-card img {
+            /* 移除以下冲突属性 */
+            /* height: 0; */
+            /* padding-bottom: 133.33%; */
+            /* pointer-events: none; */
+        }
+         /* 新增交互效果 */
+        .media-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .media-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        /* 优化视频网格布局 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        /* 修复视频卡片结构 */
+        .media-card video {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        /* 新增加载动画 */
+        @keyframes mediaEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .media-card {
+            animation: mediaEntrance 0.6s ease both;
+        }
+
+        /* 照片卡片悬停放大效果 */
+        .media-card img {
+            transition: transform 0.3s ease;
+        }
+
+        .media-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 视频播放按钮样式 */
+        video::-webkit-media-controls-play-button {
+            background-color: #ff00ff;
+            border-radius: 50%;
+        }
+
+        video::-webkit-media-controls-play-button:hover {
+            background-color: #ff44ff;
+        }
+    </style>
+    <script>
+       document.addEventListener('DOMContentLoaded', function () {
+            // 添加卡片悬停延迟动画
+            document.querySelectorAll('.media-card').forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // 视频自动播放优化
+            const videos = document.querySelectorAll('video');
+            videos.forEach(video => {
+                video.muted = true;
+                video.playsInline = true;
+
+                // 添加悬停播放控制
+                video.parentElement.addEventListener('mouseenter', () => {
+                    video.play();
+                });
+                video.parentElement.addEventListener('mouseleave', () => {
+                    video.pause();
+                    video.currentTime = 0;
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h2 class="section-title gradient-text">Mr.Krabs 镜头里的故事</h2>
+            <div class="content-item">
+                每一帧画面，都是时间留下的温柔证据。有些故事无需言语，就能透过镜头诉说。
+            </div>
+            <div class="content-item">
+                一张照片，一个眼神，藏着千言万语。或许是回忆，或许是期待，镜头下的一切，都是心绪的流动。
+            </div>
+            <div class="content-item">
+                有些风景，不只是风景；有些身影，藏着未曾言说的过往。照片定格了美，而故事却悄然继续。
+            </div>
+            <!-- 修改原有按钮结构 -->
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <a href="../uml/index.html" class="contact-btn show-popup">
+                    <img src="../Photo/qq.png" alt="QQ">
+                </a>
+                <a href="../index.html" class="contact-btn show-popup">
+                    <img src="../Photo/wx.png" alt="WeChat">
+                </a>
+            </div>
+        </div>
+        <!-- 这里需要添加照片和视频展示部分 -->
+        <!-- 照片展示部分调整 -->
+    <div class="card">
+        <h2 class="section-title gradient-text">相册共享</h2>
+        <div class="photo-grid">
+            <!-- 修改图片容器结构 -->
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/1.jpg" alt="Photo 1">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/2.jpg" alt="Photo 2">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/3.jpg" alt="Photo 3">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/4.jpg" alt="Photo 4">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/5.jpg" alt="Photo 5">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/6.jpg" alt="Photo 6">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/7.jpg" alt="Photo 7">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/8.jpg" alt="Photo 8">
+            </div><!-- 其他图片卡片同样修改... -->
+        </div>
+    </div>
+
+     <!-- 照片展示部分保持不变 -->
+
+    <!-- 修复后的视频展示部分 -->
+    <div class="card">
+        <h2 class="section-title gradient-text">视频共享</h2>
+        <div class="video-grid">
+            <!-- 每个视频单独容器 -->
+            <div class="media-card">
+                <video controls autoplay muted playsinline>
+                    <source src="../video/1.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="media-card">
+                <video controls autoplay muted playsinline>
+                    <source src="../video/2.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="media-card">
+                <video controls autoplay muted playsinline>
+                    <source src="../video/3.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="media-card">
+                <video controls autoplay muted playsinline>
+                    <source src="../video/4.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </div>
+        <div class="popup-overlay" style="display: none;">
+    <div class="popup">
+        <button class="close-btn">×</button>
+        <img class="popup-img" src="" alt="二维码">
+    </div>
+</div>
+</body>
+
+</html>

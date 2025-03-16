@@ -4,49 +4,51 @@
     <meta charset="UTF-8">
     <meta name="Keywords" content="">
     <meta name="Description" content="">
+    <!-- 添加视口相关的meta标签 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Mr.Krabs3D恋人相册</title>
     <style type="text/css">
         * { margin: 0; padding: 0; }
-		body{
-			background: url('../Photo/04.jpeg') no-repeat center center fixed;
-			background-size: cover;  /* 确保背景图片充满整个屏幕 */
-			/* background:#222; */
-			perspective:800px;/*景深*/
-		}
+        body{
+            background: url('../Photo/bj3.jpg') no-repeat center center fixed;
+            background-size: cover;  /* 确保背景图片充满整个屏幕 */
+            /* background:#222; */
+            perspective:800px;/*景深*/
+        }
         /* @keyframes oceanAnimation {
             0% { background-position: 0 0; }
             100% { background-position: 0 100%; }
         } */
         #wrap{
-			position:relative;
-			width:120px;
-			height:180px;
-			margin:auto;
-			transform-style:preserve-3d;/*设置3D环境*/
-		}
-		#wrap img{
-			position:absolute;
-			width:133px;
-			height:200px;
-			box-shadow:0 0 10px #000;
-			/*倒影:朝向 偏移*/
-			-webkit-box-reflect:below 5px -webkit-linear-gradient(top,rgba(0,0,0,0) 40%,rgba(0,0,0,.5) 100%);
-			border-radius:5px;/*圆角*/
-			/* transform:rotateY(0deg) translateZ(0px); */
-			/*transition:1s 1s;动画执行的时间 动画延迟的时间*/
-		}
-		#wrap p{
-			position:absolute;
-			left:50%;
-			top:112%;
-			margin-left:-600px;
-			margin-top:-600px;
-			width:1200px;
-			height:1200px;
-			border-radius:50%;
-			background:-webkit-radial-gradient(center center,600px 600px,rgba(122,122,122,0.2),rgba(0,0,0,0));
-			transform:rotateX(90deg);
-		}
+            position:relative;
+            width:120px;
+            height:180px;
+            margin:auto;
+            transform-style:preserve-3d;/*设置3D环境*/
+        }
+        #wrap img{
+            position:absolute;
+            width:133px;
+            height:200px;
+            box-shadow:0 0 10px #000;
+            -webkit-box-reflect:below 5px -webkit-linear-gradient(top,rgba(0,0,0,0) 40%,rgba(0,0,0,.5) 100%);
+            border-radius:5px;
+            object-fit: cover; /* 保持图片比例并覆盖整个容器 */
+            /* object-fit: contain; 保持图片比例并适应容器 */
+        }
+        #wrap p{
+            position:absolute;
+            left:50%;
+            top:112%;
+            margin-left:-600px;
+            margin-top:-600px;
+            width:1200px;
+            height:1200px;
+            border-radius:50%;
+            background:-webkit-radial-gradient(center center,600px 600px,rgba(122,122,122,0.2),rgba(0,0,0,0));
+            transform:rotateX(90deg);
+        }
     </style>
 </head>
 <body>

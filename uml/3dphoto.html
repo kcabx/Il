@@ -1,56 +1,58 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="Keywords" content="">
     <meta name="Description" content="">
-    <!-- 添加视口相关的meta标签 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Mr.Krabs3D恋人相册</title>
     <style type="text/css">
-        * { margin: 0; padding: 0; }
-        body{
-            background: url('../Photo/bj3.jpg') no-repeat center center fixed;
-            background-size: cover;  /* 确保背景图片充满整个屏幕 */
-            /* background:#222; */
-            perspective:800px;/*景深*/
+        * {
+            margin: 0;
+            padding: 0;
         }
-        /* @keyframes oceanAnimation {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        } */
-        #wrap{
-            position:relative;
-            width:120px;
-            height:180px;
-            margin:auto;
-            transform-style:preserve-3d;/*设置3D环境*/
+
+        body {
+            background: no-repeat center center fixed;
+            background-size: cover;
+            perspective: 800px;
         }
-        #wrap img{
-            position:absolute;
-            width:133px;
-            height:200px;
-            box-shadow:0 0 10px #000;
-            -webkit-box-reflect:below 5px -webkit-linear-gradient(top,rgba(0,0,0,0) 40%,rgba(0,0,0,.5) 100%);
-            border-radius:5px;
-            object-fit: cover; /* 保持图片比例并覆盖整个容器 */
-            /* object-fit: contain; 保持图片比例并适应容器 */
+
+        #wrap {
+            position: relative;
+            width: 120px;
+            height: 180px;
+            margin: auto;
+            transform-style: preserve-3d;
         }
-        #wrap p{
-            position:absolute;
-            left:50%;
-            top:112%;
-            margin-left:-600px;
-            margin-top:-600px;
-            width:1200px;
-            height:1200px;
-            border-radius:50%;
-            background:-webkit-radial-gradient(center center,600px 600px,rgba(122,122,122,0.2),rgba(0,0,0,0));
-            transform:rotateX(90deg);
+
+        #wrap img {
+            position: absolute;
+            width: 133px;
+            height: 200px;
+            box-shadow: 0 0 10px #000;
+            -webkit-box-reflect: below 5px -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .5) 100%);
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        #wrap p {
+            position: absolute;
+            left: 50%;
+            top: 112%;
+            margin-left: -600px;
+            margin-top: -600px;
+            width: 1200px;
+            height: 1200px;
+            border-radius: 50%;
+            background: -webkit-radial-gradient(center center, 600px 600px, rgba(122, 122, 122, 0.2), rgba(0, 0, 0, 0));
+            transform: rotateX(90deg);
         }
     </style>
 </head>
+
 <body>
     <div id="wrap">
         <img src="../Photo/1.jpg" alt="" />
@@ -67,12 +69,26 @@
         <p></p>
     </div>
     <script type="text/javascript">
+        // 定义三张背景图片的路径
+        var backgroundImages = [
+            '../Photo/bj1.jpg',
+            '../Photo/bj2.jpg',
+            '../Photo/bj3.jpg'
+        ];
+
+        // 随机选择一张图片
+        var randomIndex = Math.floor(Math.random() * backgroundImages.length);
+        var randomImage = backgroundImages[randomIndex];
+
+        // 设置背景图片
+        document.body.style.backgroundImage = 'url(' + randomImage + ')';
+
         var oWrap = document.getElementById("wrap");
         var aImg = oWrap.getElementsByTagName("img");
         //让盒子自适应的垂直居中
-        function mTop(){
+        function mTop() {
             var H = document.documentElement.clientHeight;
-            oWrap.style.marginTop = H/2 - 180 + "px";
+            oWrap.style.marginTop = H / 2 - 180 + "px";
         }
         mTop();
         window.onresize = mTop;
@@ -120,4 +136,5 @@
         }
     </script>
 </body>
+
 </html>

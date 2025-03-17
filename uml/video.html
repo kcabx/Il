@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mr.Krabs整合资源</title>
+    <title>Mr.ShaoFa相册资源互通</title>
     <style>
         * {
             margin: 0;
@@ -457,13 +457,13 @@
     <div class="container">
         <div class="card">
             <h2 class="section-title gradient-text">Mr.Krabs 镜头里的故事</h2>
-            <div class="content-item">
+            <div class="content-item gradient-text">
                 每一帧画面，都是时间留下的温柔证据。有些故事无需言语，就能透过镜头诉说。
             </div>
-            <div class="content-item">
+            <div class="content-item gradient-text">
                 一张照片，一个眼神，藏着千言万语。或许是回忆，或许是期待，镜头下的一切，都是心绪的流动。
             </div>
-            <div class="content-item">
+            <div class="content-item gradient-text">
                 有些风景，不只是风景；有些身影，藏着未曾言说的过往。照片定格了美，而故事却悄然继续。
             </div>
             <!-- 修改原有按钮结构 -->
@@ -505,6 +505,27 @@
             </div>
             <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
                 <img src="../Photo/8.jpg" alt="Photo 8">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/9.jpg" alt="Photo 9">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/10.jpg" alt="Photo 10">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/11.jpg" alt="Photo 11">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/12.jpg" alt="Photo 12">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/13.jpg" alt="Photo 13">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/14.jpg" alt="Photo 14">
+            </div>
+            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
+                <img src="../Photo/15.jpg" alt="Photo 15">
             </div><!-- 其他图片卡片同样修改... -->
         </div>
     </div>
@@ -517,23 +538,43 @@
         <div class="video-grid">
             <!-- 每个视频单独容器 -->
             <div class="media-card">
-                <video controls autoplay muted playsinline>
+                <video controls autoplay muted playsinline loop>
                     <source src="../video/1.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="media-card">
-                <video controls autoplay muted playsinline>
+                <video controls autoplay muted playsinline loop>
                     <source src="../video/2.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="media-card">
-                <video controls autoplay muted playsinline>
+                <video controls autoplay muted playsinline loop>
                     <source src="../video/3.mp4" type="video/mp4">
                 </video>
             </div>
             <div class="media-card">
-                <video controls autoplay muted playsinline>
+                <video controls autoplay muted playsinline loop>
                     <source src="../video/4.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="media-card">
+                <video controls autoplay muted playsinline loop>
+                    <source src="../video/5.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="media-card">
+                <video controls autoplay muted playsinline loop>
+                    <source src="../video/6.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="media-card">
+                <video controls autoplay muted playsinline loop>
+                    <source src="../video/7.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="media-card">
+                <video controls autoplay muted playsinline loop>
+                    <source src="../video/8.mp4" type="video/mp4">
                 </video>
             </div>
         </div>
@@ -544,6 +585,23 @@
         <img class="popup-img" src="" alt="二维码">
     </div>
 </div>
+ <script>
+ // 禁用右键菜单
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
+document.addEventListener("keydown", function (event) {
+    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+});
+ </script>
+
 </body>
 
 </html>

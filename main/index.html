@@ -266,5 +266,21 @@
 
 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
 <script>LA.init({ id: "KFqltKSkJgQTGD9l", ck: "KFqltKSkJgQTGD9l" })</script>
+<script>
+	// 禁用右键菜单
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
+document.addEventListener("keydown", function (event) {
+    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+});
+</script>
 
 </html>

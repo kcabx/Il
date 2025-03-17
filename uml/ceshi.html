@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr.Krabs 资源中心</title>
+    <style>
+        :root {
+            --mac-blue: #007AFF;
+            --mac-red: #FF3B30;
+            --mac-yellow: #FFCC00;
+            --mac-green: #34C759;
+            --base-bg: rgba(242, 242, 247, 0.8);
+            --text-primary: #1C1C1E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell;
+        }
+
+        body {
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36zwjjgzhhYWGMYAEYB8RmROaABADeOQ8CXl/xfgAAAABJRU5ErkJggg==');
+            min-height: 100vh;
+            backdrop-filter: blur(40px);
+            color: var(--text-primary);
+        }
+
+        /* macOS 窗口样式 */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: var(--base-bg);
+            border-radius: 14px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+        }
+
+        /* 窗口控制按钮 */
+        .window-controls {
+            display: flex;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+        }
+
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            transition: transform 0.2s;
+        }
+
+        .close { background: var(--mac-red); }
+        .minimize { background: var(--mac-yellow); }
+        .maximize { background: var(--mac-green); }
+
+        /* 卡片样式升级 */
+        .card {
+            padding: 1.5rem;
+            margin: 1.5rem;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 动态标题 */
+        .dynamic-title {
+            font-size: 1.8rem;
+            background: linear-gradient(120deg,
+                #FF375F 0%,
+                #FF9F0A 25%,
+                #32D74B 50%,
+                #0A84FF 75%,
+                #BF5AF2 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: GradientShift 8s ease infinite;
+            padding: 1rem 0;
+        }
+
+        @keyframes GradientShift {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+
+        /* 按钮样式升级 */
+        .contact-btn {
+            display: inline-flex;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+            text-decoration: none;
+            margin: 0 0.5rem;
+            align-items: center;
+        }
+
+        .contact-btn img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+
+        .contact-btn:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 工具列表动画 */
+        .tool-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .resource-card:hover .tool-list {
+            max-height: 500px;
+        }
+
+        /* 弹窗样式升级 */
+        .popup {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 14px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .close-btn {
+            background: var(--mac-red);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        /* 网格布局优化 */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        /* 深色模式适配 */
+        body.dark-mode {
+            --base-bg: rgba(28, 28, 30, 0.9);
+            --text-primary: #FFFFFF;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36zwjjgzhhYWGMYAEYB8RmROaABADeOQ8CXl/xfgAAAABJRU5ErkJggg==');
+        }
+
+        body.dark-mode .card {
+            background: rgba(44, 44, 46, 0.6);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 加载动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) }
+            50% { transform: translateY(-8px) }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="window-controls">
+            <div class="control-btn close"></div>
+            <div class="control-btn minimize"></div>
+            <div class="control-btn maximize"></div>
+        </div>
+
+        <div class="card">
+            <h2 class="dynamic-title">Mr.Krabs 资源中心</h2>
+            <div class="content-item">
+                <!-- 原有内容保持不变 -->
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 20px;">
+                <!-- 按钮保留原有结构 -->
+            </div>
+        </div>
+
+        <!-- 其他卡片区块保持原有结构 -->
+    </div>
+
+    <!-- 弹窗结构保持不变 -->
+
+    <script>
+        // 原有JavaScript功能保留，增加新交互
+        document.querySelectorAll('.resource-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = `perspective(1000px) rotateX(${Math.random()*2-1}deg) rotateY(${Math.random()*2-1}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'none';
+            });
+        });
+
+        // 按钮点击动画
+        document.querySelectorAll('button, a').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+
+        // 保留原有深色模式功能
+        // 禁用右键菜单
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
+document.addEventListener("keydown", function (event) {
+    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+});
+    </script>
+</body>
+</html>

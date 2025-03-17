@@ -142,11 +142,41 @@
         }
 
         .gradient-text {
-            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: bold;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96c93d, #ffd700);
+        background-size: 400% 400%;
+        animation: gradientFlow 8s ease infinite;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* 新增流光动画 */
+    @keyframes gradientFlow {
+        0% {
+            background-position: 0% 50%;
         }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    /* 优化标题样式 */
+    .section-title {
+        font-size: 32px;
+        margin-bottom: 25px;
+        display: inline-block;
+        padding: 0 20px;
+        transition: all 0.3s ease;
+    }
+
+    /* 添加标题悬停效果 */
+    .section-title:hover {
+        transform: scale(1.05);
+        text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
 
         .highlight {
             color: #ff00ff;
@@ -169,7 +199,7 @@
         .card-title {
             font-size: 18px;
             margin-bottom: 10px;
-            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff4500, #ff0000);
+            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff00ff);
             background-size: 400% 400%;
             animation: textGradient 15s ease infinite;
             -webkit-background-clip: text;
@@ -184,7 +214,22 @@
             margin: 5px 0;
             text-decoration: none;
             transition: all 0.3s ease;
-            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff4500, #ff0000);
+            background: linear-gradient(45deg, #ff7eb3,#ff758c,#ffb199,#ffcf7c );
+            background-size: 400% 400%;
+            animation: textGradient 15s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        .tool-bvn {
+            display: block;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 8px 12px;
+            margin: 5px 0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #ffcf7c,#ffb199,#ff758c,#ff7eb3 );
             background-size: 400% 400%;
             animation: textGradient 15s ease infinite;
             -webkit-background-clip: text;
@@ -249,10 +294,10 @@
         }
         /* 新增深色模式相关样式 */
         :root {
-            --bg-color1: #ffb6c1;
-            --bg-color2: #add8e6;
-            --bg-color3: #90ee90;
-            --bg-color4: #da70d6;
+            --bg-color1: #09203f;
+            --bg-color2: #537895;
+            --bg-color3: #1b4965;
+            --bg-color4: #0b132b;
         }
 
         body.dark-mode {
@@ -305,13 +350,13 @@
     <div class="container">
         <div class="card">
             <h2 class="section-title gradient-text">Mr.Krabs 温馨提示</h2>
-            <div class="content-item">
+            <div class="content-item tool-btn">
                 作者能力有限，只会 Kali Linux、Python、Pycharm、Html5、Css、JavaScript、Blender、FactoryIO...打不开就是未添加
             </div>
-            <div class="content-item">
+            <div class="content-item tool-bvn">
                 已安装过服务器容量 10T，存储了大量<span class="highlight">照片、视频、工作文件</span>等，所以网站不会部署到服务器
             </div>
-            <div class="content-item">
+            <div class="content-item tool-btn">
                 所有<span class="highlight">表白</span>工具均可按照情况<span class="highlight">免费</span>定制文字内容、展示效果、链接...如有需要请联系<span class="highlight">开发者</span>
             </div>
             <div style="display: flex; justify-content: center; margin-top: 20px;">
@@ -469,6 +514,20 @@
                 document.body.classList.add('dark-mode');
             }
         });
+        // 禁用右键菜单
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
+document.addEventListener("keydown", function (event) {
+    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+});
     </script>
 </body>
 

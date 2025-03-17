@@ -168,6 +168,22 @@
         <p>建议环境：IE8及以上、360、谷歌、Firefox v22</p>
         <p>技术支持：平凉市网络安全大队 联系电话：0933-8213021</p>
     </div>
+<script>
+    // 禁用右键菜单
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
+document.addEventListener("keydown", function (event) {
+    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+});
+</script>
 </body>
 
 </html>

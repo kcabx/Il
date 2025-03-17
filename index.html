@@ -24,5 +24,21 @@
         <a href="uml/video.html" class="link-xx" target="_blank">共享图集</a>
         <br><p class="foottitle">Mr.Krabs ©ShaoFa三个和尚网络传媒有限公司</p>
     </div>
+    <script>
+        // 禁用右键菜单
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
+document.addEventListener("keydown", function (event) {
+    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
+        event.preventDefault();
+        alert("源码保护，禁止查看！");
+    }
+});
+    </script>
 </body>
 </html>

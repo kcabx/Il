@@ -1,306 +1,325 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mr.ShaoFa相册资源互通</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'SF Pro Display', sans-serif;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body {
-            /* 修改为背景图片 */
             background-image: url('../Photo/backjped.jpg');
-            background-size: cover; /* 让图片覆盖整个背景 */
-            background-position: center; /* 图片居中显示 */
-            background-repeat: no-repeat; /* 不重复显示图片 */
-            line-height: 1.6;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            color: #fff;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 20px 0;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .section-title {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #333333;
             position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            height: 3px;
-            width: 100px;
-            margin-top: 10px;
-            background: linear-gradient(90deg, #8c54e9, #4a90e2);
-        }
-
-        .resource-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        /* 照片展示网格，一行展示6个 */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
-        }
-
-        /* 视频展示网格，一行放四个 */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-        }
-
-        .app-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .app-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
-        }
-
-        .app-icon {
-            width: 60px;
-            height: 60px;
-            margin: 10px auto;
-            background-size: cover;
-            border-radius: 10px;
-        }
-
-        .app-name {
-            font-size: 16px;
-            color: #666666;
-            margin: 5px 0;
-        }
-
-        .contact-btn {
-            display: inline-flex;
+            width: 100%;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            margin: 0 10px;
-            transition: all 0.3s ease;
-            position: relative;
         }
 
-        .contact-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            max-width: 600px;
+            transition: transform 0.4s ease;
+            will-change: transform;
+        }
+
+        .welcome-card:hover {
             transform: scale(1.05);
         }
 
-        .contact-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 44px;
-            height: 44px;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            z-index: -1;
+        .section-title {
+            font-size: clamp(28px, 6vw, 40px);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
         }
 
-        .contact-btn img {
-            width: 24px;
-            height: 24px;
-            filter: none;
-        }
-        /* 新增弹窗相关样式 */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.popup {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    position: relative;
-    max-width: 80%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.popup-img {
-    max-width: 300px;
-    max-height: 300px;
-    display: block;
-    margin: 0 auto;
-}
-
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 28px;
-    color: #666;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-
-.close-btn:hover {
-    color: #ff4757;
-}
-
-/* 修改原有按钮样式 */
-.contact-btn {
-    cursor: pointer;
-    text-decoration: none !important;
-}
-
-        /* 修改原有的.gradient-text类 */
-    .gradient-text {
-        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96c93d, #ffd700);
-        background-size: 400% 400%;
-        animation: gradientFlow 8s ease infinite;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    /* 新增流光动画 */
-    @keyframes gradientFlow {
-        0% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-
-    /* 优化标题样式 */
-    .section-title {
-        font-size: 32px;
-        margin-bottom: 25px;
-        display: inline-block;
-        padding: 0 20px;
-        transition: all 0.3s ease;
-    }
-
-    /* 添加标题悬停效果 */
-    .section-title:hover {
-        transform: scale(1.05);
-        text-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-        .highlight {
-            color: #ff00ff;
-            font-weight: 500;
+        .content-text {
+            font-size: clamp(16px, 3vw, 18px);
+            color: rgba(255, 255, 255, 0.9);
+            margin: 10px 0;
         }
 
-        .resource-card {
-            background: rgba(255, 255, 255, 0.05);
+        .content-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 50;
+            animation: slideInPage 0.4s ease forwards;
+        }
+
+        .content-page.active {
+            display: block;
+        }
+
+        .media-flow, .memo-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .media-item, .memo-item {
+            position: relative;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 15px;
-            transition: all 0.3s ease;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            will-change: transform, box-shadow;
             cursor: pointer;
         }
 
-        .resource-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
+        .media-item:hover, .memo-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .card-title {
-            font-size: 18px;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff4500, #ff0000);
-            background-size: 400% 400%;
-            animation: textGradient 15s ease infinite;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .media-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.4s ease;
         }
 
-        .tool-btn {
-            display: block;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            padding: 8px 12px;
-            margin: 5px 0;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            background: linear-gradient(45deg, #ffd700, #ff8c00, #ff4500, #ff0000);
-            background-size: 400% 400%;
-            animation: textGradient 15s ease infinite;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .media-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .media-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+
+        .media-item:hover video {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        .photo-small { width: 150px; height: 200px; }
+        .photo-medium { width: 200px; height: 300px; }
+        .photo-large { width: 250px; height: 350px; }
+        .video-item { width: 250px; height: 180px; }
+
+        /* 备忘录卡片样式 */
+        .memo-item {
+            width: 220px;
+            height: 280px;
+            background: rgba(255, 245, 200, 0.9); /* 便签纸黄色 */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: rotate(0deg);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            perspective: 1000px;
+        }
+
+        .memo-item:hover {
+            transform: translateY(-5px) rotate(2deg);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .memo-item .memo-inner {
             position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
         }
 
-        .tool-btn:hover {
-            background: rgba(0, 0, 0, 0.3);
-            -webkit-text-fill-color: #fff;
+        .memo-item.flipped .memo-inner {
+            transform: rotateY(180deg);
         }
 
-        .tool-list {
-            display: none;
+        .memo-front, .memo-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .memo-front {
+            background: rgba(255, 245, 200, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .memo-back {
+            background: rgba(255, 245, 200, 0.9);
+            border-radius: 10px;
+            transform: rotateY(180deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .memo-front h4 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding-bottom: 5px;
+        }
+
+        .memo-front p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 6;
+            -webkit-box-orient: vertical;
+        }
+
+        .memo-front .date {
+            font-size: 12px;
+            color: #888;
+            text-align: right;
             margin-top: 10px;
         }
 
-        .popup {
-            display: none;
+        .control-bar {
             position: fixed;
-            top: 50%;
+            bottom: 20px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 1000;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            gap: 20px;
+            z-index: 100;
         }
 
-        .popup img {
-            max-width: 300px;
-            max-height: 300px;
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, background 0.3s ease;
+            cursor: pointer;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.15);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .control-btn img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .popup-overlay, .ip-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .ip-popup {
+            display: flex;
+        }
+
+        .popup, .ip-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 20px;
+            border-radius: 15px;
+            position: relative;
+            max-width: 500px;
+            text-align: center;
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+        }
+
+        .ip-info h3 {
+            font-size: 24px;
+            color: #ff0000;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        .ip-info #ip-location {
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .ip-info .warning {
+            font-size: 14px;
+            color: #ff0000;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+            font-weight: bold;
+            line-height: 1.5;
+            padding: 10px;
+            background: rgba(255, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .popup-img {
+            max-width: 100%;
+            max-height: 70vh;
+            display: block;
+            margin: 0 auto;
         }
 
         .close-btn {
@@ -309,299 +328,331 @@
             right: 10px;
             background: none;
             border: none;
-            font-size: 20px;
+            font-size: 24px;
+            color: #fff;
             cursor: pointer;
+            transition: color 0.3s ease;
         }
 
-        @keyframes textGradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+        .close-btn:hover {
+            color: #ff4757;
         }
 
-        /* 新增鼠标悬停显示工具列表的样式 */
-        .resource-card:hover .tool-list {
-            display: block;
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-30px) rotate(-5deg); }
+            to { opacity: 1; transform: translateY(0) rotate(0deg); }
         }
 
-        /* 照片和视频卡片样式 */
-        /* 新增图片容器固定宽高比样式 */
-        .media-card {
-            position: relative;
-            overflow: hidden;
+        @keyframes slideInPage {
+            from { opacity: 0; transform: translateX(-100%); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        .media-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 10px;
+        .media-item, .memo-item {
+            animation: slideIn 0.6s ease forwards;
         }
 
-        /* 修复视频容器尺寸问题 */
-        .media-card video {
-            width: 100%;
-            height: 200px; /* 固定视频高度 */
-            object-fit: cover;
-            border-radius: 10px;
+        @media (max-width: 768px) {
+            .photo-small { width: 120px; height: 160px; }
+            .photo-medium { width: 150px; height: 200px; }
+            .photo-large { width: 180px; height: 240px; }
+            .video-item { width: 200px; height: 150px; }
+            .memo-item { width: 180px; height: 240px; }
+            .control-bar { padding: 8px 15px; }
+            .control-btn { width: 40px; height: 40px; }
+            .control-btn img { width: 20px; height: 20px; }
+            .ip-info { padding: 15px; max-width: 90%; }
+            .ip-info h3 { font-size: 20px; }
+            .ip-info #ip-location { font-size: 14px; }
+            .ip-info .warning { font-size: 12px; }
         }
 
-        /* 移除冲突的CSS属性 */
-        .media-card img {
-            /* 移除以下冲突属性 */
-            /* height: 0; */
-            /* padding-bottom: 133.33%; */
-            /* pointer-events: none; */
-        }
-         /* 新增交互效果 */
-        .media-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .media-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-
-        /* 优化视频网格布局 */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 25px;
-        }
-
-        /* 修复视频卡片结构 */
-        .media-card video {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 15px;
-            transition: transform 0.3s ease;
-        }
-
-        /* 新增加载动画 */
-        @keyframes mediaEntrance {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .media-card {
-            animation: mediaEntrance 0.6s ease both;
-        }
-
-        /* 照片卡片悬停放大效果 */
-        .media-card img {
-            transition: transform 0.3s ease;
-        }
-
-        .media-card:hover img {
-            transform: scale(1.05);
-        }
-
-        /* 视频播放按钮样式 */
-        video::-webkit-media-controls-play-button {
-            background-color: #ff00ff;
-            border-radius: 50%;
-        }
-
-        video::-webkit-media-controls-play-button:hover {
-            background-color: #ff44ff;
+        @media (max-width: 480px) {
+            .container { padding: 10px; }
+            .welcome-card { padding: 15px; }
+            .photo-small { width: 100px; height: 130px; }
+            .photo-medium { width: 120px; height: 160px; }
+            .photo-large { width: 140px; height: 180px; }
+            .video-item { width: 160px; height: 120px; }
+            .memo-item { width: 160px; height: 200px; }
+            .ip-info h3 { font-size: 18px; }
+            .ip-info #ip-location { font-size: 12px; }
+            .ip-info .warning { font-size: 10px; }
         }
     </style>
-    <script>
-       document.addEventListener('DOMContentLoaded', function () {
-            // 添加卡片悬停延迟动画
-            document.querySelectorAll('.media-card').forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-            });
-
-            // 视频自动播放优化
-            const videos = document.querySelectorAll('video');
-            videos.forEach(video => {
-                video.muted = true;
-                video.playsInline = true;
-
-                // 添加悬停播放控制
-                video.parentElement.addEventListener('mouseenter', () => {
-                    video.play();
-                });
-                video.parentElement.addEventListener('mouseleave', () => {
-                    video.pause();
-                    video.currentTime = 0;
-                });
-            });
-        });
-    </script>
 </head>
-
 <body>
     <div class="container">
-        <div class="card">
-            <h2 class="section-title gradient-text">Mr.Krabs 镜头里的故事</h2>
-            <div class="content-item gradient-text">
-                每一帧画面，都是时间留下的温柔证据。有些故事无需言语，就能透过镜头诉说。
-            </div>
-            <div class="content-item gradient-text">
-                一张照片，一个眼神，藏着千言万语。或许是回忆，或许是期待，镜头下的一切，都是心绪的流动。
-            </div>
-            <div class="content-item gradient-text">
-                有些风景，不只是风景；有些身影，藏着未曾言说的过往。照片定格了美，而故事却悄然继续。
-            </div>
-            <!-- 修改原有按钮结构 -->
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <a href="../uml/index.html" class="contact-btn show-popup">
-                    <img src="../Photo/qq.png" alt="QQ">
-                </a>
-                <a href="../index.html" class="contact-btn show-popup">
-                    <img src="../Photo/wx.png" alt="WeChat">
-                </a>
-            </div>
-        </div>
-        <!-- 这里需要添加照片和视频展示部分 -->
-        <!-- 照片展示部分调整 -->
-    <div class="card">
-        <h2 class="section-title gradient-text">相册共享</h2>
-        <div class="photo-grid">
-            <!-- 修改图片容器结构 -->
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/1.jpg" alt="Photo 1">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/2.jpg" alt="Photo 2">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/3.jpg" alt="Photo 3">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/4.jpg" alt="Photo 4">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/5.jpg" alt="Photo 5">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/6.jpg" alt="Photo 6">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/7.jpg" alt="Photo 7">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/8.jpg" alt="Photo 8">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/9.jpg" alt="Photo 9">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/10.jpg" alt="Photo 10">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/11.jpg" alt="Photo 11">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/12.jpg" alt="Photo 12">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/13.jpg" alt="Photo 13">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/14.jpg" alt="Photo 14">
-            </div>
-            <div class="media-card" style="padding-bottom: 133.33%;"> <!-- 保持3:4宽高比 -->
-                <img src="../Photo/15.jpg" alt="Photo 15">
-            </div><!-- 其他图片卡片同样修改... -->
+        <div class="welcome-card">
+            <h2 class="section-title">Mr.Krabs 镜头里的故事</h2>
+            <p class="content-text">欢迎体验照片、视频与备忘录的奇妙旅程</p>
         </div>
     </div>
 
-     <!-- 照片展示部分保持不变 -->
+    <div id="photos-page" class="content-page">
+        <div class="media-flow">
+            <div class="media-item photo-medium"><img src="../Photo/1.jpg" alt="Photo 1"></div>
+            <div class="media-item photo-large"><img src="../Photo/2.jpg" alt="Photo 2"></div>
+            <div class="media-item photo-small"><img src="../Photo/3.jpg" alt="Photo 3"></div>
+            <div class="media-item photo-medium"><img src="../Photo/4.jpg" alt="Photo 4"></div>
+            <div class="media-item photo-large"><img src="../Photo/5.jpg" alt="Photo 5"></div>
+            <div class="media-item photo-small"><img src="../Photo/6.jpg" alt="Photo 6"></div>
+            <div class="media-item photo-medium"><img src="../Photo/7.jpg" alt="Photo 7"></div>
+            <div class="media-item photo-large"><img src="../Photo/8.jpg" alt="Photo 8"></div>
+            <div class="media-item photo-small"><img src="../Photo/9.jpg" alt="Photo 9"></div>
+            <div class="media-item photo-medium"><img src="../Photo/10.jpg" alt="Photo 10"></div>
+            <div class="media-item photo-large"><img src="../Photo/11.jpg" alt="Photo 11"></div>
+            <div class="media-item photo-small"><img src="../Photo/12.jpg" alt="Photo 12"></div>
+            <div class="media-item photo-medium"><img src="../Photo/13.jpg" alt="Photo 13"></div>
+            <div class="media-item photo-large"><img src="../Photo/14.jpg" alt="Photo 14"></div>
+            <div class="media-item photo-small"><img src="../Photo/15.jpg" alt="Photo 15"></div>
+        </div>
+    </div>
 
-    <!-- 修复后的视频展示部分 -->
-    <div class="card">
-        <h2 class="section-title gradient-text">视频共享</h2>
-        <div class="video-grid">
-            <!-- 每个视频单独容器 -->
-            <div class="media-card">
-                <video controls autoplay muted playsinline loop>
-                    <source src="../video/1.mp4" type="video/mp4">
-                </video>
+    <div id="videos-page" class="content-page">
+        <div class="media-flow">
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/1.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/2.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/3.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/4.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/5.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/6.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/7.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/8.mp4" type="video/mp4"></video></div>
+        </div>
+    </div>
+
+    <div id="memos-page" class="content-page">
+        <div class="memo-grid">
+            <div class="memo-item">
+                <div class="memo-inner">
+                    <div class="memo-front">
+                        <h4>记忆的温柔</h4>
+                        <p>每一帧画面，都是时间留下的温柔证据。</p>
+                        <div class="date">2025-04-05</div>
+                    </div>
+                    <div class="memo-back">
+                        <p>背面留白</p>
+                    </div>
+                </div>
             </div>
-            <div class="media-card">
-                <video controls autoplay muted playsinline loop>
-                    <source src="../video/2.mp4" type="video/mp4">
-                </video>
+            <div class="memo-item">
+                <div class="memo-inner">
+                    <div class="memo-front">
+                        <h4>无声的故事</h4>
+                        <p>有些故事无需言语，就能透过镜头诉说。</p>
+                        <div class="date">2025-04-05</div>
+                    </div>
+                    <div class="memo-back">
+                        <p>背面留白</p>
+                    </div>
+                </div>
             </div>
-            <div class="media-card">
-                <video controls autoplay muted playsinline loop>
-                    <source src="../video/3.mp4" type="video/mp4">
-                </video>
+            <div class="memo-item">
+                <div class="memo-inner">
+                    <div class="memo-front">
+                        <h4>眼神的语言</h4>
+                        <p>一张照片，一个眼神，藏着千言万语。</p>
+                        <div class="date">2025-04-05</div>
+                    </div>
+                    <div class="memo-back">
+                        <p>背面留白</p>
+                    </div>
+                </div>
             </div>
-            <div class="media-card">
-                <video controls autoplay muted playsinline loop>
-                    <source src="../video/4.mp4" type="video/mp4">
-                </video>
+            <div class="memo-item">
+                <div class="memo-inner">
+                    <div class="memo-front">
+                        <h4>心绪的流动</h4>
+                        <p>或许是回忆，或许是期待，镜头下的一切，都是心绪的流动。</p>
+                        <div class="date">2025-04-05</div>
+                    </div>
+                    <div class="memo-back">
+                        <p>背面留白</p>
+                    </div>
+                </div>
             </div>
-            <div class="media-card">
-                <video controls autoplay muted playsinline loop>
-                    <source src="../video/5.mp4" type="video/mp4">
-                </video>
+            <div class="memo-item">
+                <div class="memo-inner">
+                    <div class="memo-front">
+                        <h4>不只是风景</h4>
+                        <p>有些风景，不只是风景。</p>
+                        <div class="date">2025-04-05</div>
+                    </div>
+                    <div class="memo-back">
+                        <p>背面留白</p>
+                    </div>
+                </div>
             </div>
-            <div class="media-card">
-                <video controls autoplay muted playsinline loop>
-                    <source src="../video/6.mp4" type="video/mp4">
-                </video>
+            <div class="memo-item">
+                <div class="memo-inner">
+                    <div class="memo-front">
+                        <h4>未言的过往</h4>
+                        <p>有些身影，藏着未曾言说的过往。</p>
+                        <div class="date">2025-04-05</div>
+                    </div>
+                    <div class="memo-back">
+                        <p>背面留白</p>
+                    </div>
+                </div>
             </div>
-            <div class="media-card">
-                <video controls autoplay muted playsinline loop>
-                    <source src="../video/7.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="media-card">
-                <video controls autoplay muted playsinline loop>
-                    <source src="../video/8.mp4" type="video/mp4">
-                </video>
+            <div class="memo-item">
+                <div class="memo-inner">
+                    <div class="memo-front">
+                        <h4>定格与延续</h4>
+                        <p>照片定格了美，而故事却悄然继续。</p>
+                        <div class="date">2025-04-05</div>
+                    </div>
+                    <div class="memo-back">
+                        <p>背面留白</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-        <div class="popup-overlay" style="display: none;">
-    <div class="popup">
-        <button class="close-btn">×</button>
-        <img class="popup-img" src="" alt="二维码">
+
+    <div class="control-bar">
+        <div class="control-btn" data-page="photos-page"><img src="../Photo/photo.png" alt="Photos"></div>
+        <div class="control-btn" data-page="videos-page"><img src="../Photo/video.png" alt="Videos"></div>
+        <div class="control-btn" data-page="memos-page"><img src="../Photo/memo.png" alt="Memos"></div>
+        <a href="../uml/index.html" class="control-btn"><img src="../Photo/qq.png" alt="QQ"></a>
+        <a href="../index.html" class="control-btn"><img src="../Photo/wx.png" alt="WeChat"></a>
     </div>
-</div>
- <script>
- // 禁用右键菜单
-document.addEventListener('contextmenu', event => event.preventDefault());
 
-// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
-document.addEventListener("keydown", function (event) {
-    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
-        event.preventDefault();
-        alert("源码保护，禁止查看！");
-    }
-    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
-        event.preventDefault();
-        alert("源码保护，禁止查看！");
-    }
-});
- </script>
+    <div class="popup-overlay">
+        <div class="popup">
+            <button class="close-btn">×</button>
+            <img class="popup-img" src="" alt="二维码">
+        </div>
+    </div>
 
+    <div class="ip-popup">
+        <div class="ip-info">
+            <h3>系统检测</h3>
+            <p id="ip-location">正在获取您的位置信息...</p>
+            <p class="warning">IP信息已被记录，当前位置已发送至服务器，如有攻击破坏网站的行为，将追究刑事责任！</p>
+            <button class="close-btn">×</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // IP和位置弹窗
+            const ipPopup = document.querySelector('.ip-popup');
+            const ipLocation = document.getElementById('ip-location');
+            fetch('https://ipapi.co/json/')
+                .then(response => response.json())
+                .then(data => {
+                    const city = data.city || '未知城市';
+                    const region = data.region || '未知地区';
+                    const country = data.country_name || '未知国家';
+
+                    const cityMap = {
+                        'Lanzhou': '兰州市',
+                        'Beijing': '北京市',
+                        'Shanghai': '上海市',
+                    };
+                    const regionMap = {
+                        'Gansu': '甘肃省',
+                        'Beijing': '北京市',
+                        'Shanghai': '上海市',
+                    };
+                    const countryMap = {
+                        'China': '中国',
+                    };
+
+                    const cityCN = cityMap[city] || city;
+                    const regionCN = regionMap[region] || region;
+                    const countryCN = countryMap[country] || country;
+
+                    ipLocation.textContent = `您的IP: ${data.ip}，位置: ${cityCN}，${regionCN}，${countryCN}`;
+                })
+                .catch(() => {
+                    ipLocation.textContent = '无法获取位置信息';
+                });
+
+            const ipCloseBtn = ipPopup.querySelector('.close-btn');
+            ipCloseBtn.addEventListener('click', () => ipPopup.style.display = 'none');
+            ipPopup.addEventListener('click', (e) => {
+                if (e.target === ipPopup) ipPopup.style.display = 'none';
+            });
+
+            // 页面切换
+            const controlBtns = document.querySelectorAll('.control-btn:not(a)');
+            const pages = document.querySelectorAll('.content-page');
+            let activePage = null;
+
+            controlBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const pageId = btn.getAttribute('data-page');
+                    const targetPage = document.getElementById(pageId);
+
+                    if (activePage && activePage !== targetPage) {
+                        activePage.classList.remove('active');
+                    }
+
+                    targetPage.classList.toggle('active');
+                    activePage = targetPage.classList.contains('active') ? targetPage : null;
+
+                    const items = targetPage.querySelectorAll('.media-item, .memo-item');
+                    items.forEach((item, index) => {
+                        item.style.animationDelay = `${index * 0.1}s`;
+                    });
+                });
+            });
+
+            // 视频交互
+            const videos = document.querySelectorAll('#videos-page video');
+            videos.forEach(video => {
+                video.play();
+
+                video.addEventListener('mouseenter', () => {
+                    video.muted = false;
+                });
+
+                video.addEventListener('mouseleave', () => {
+                    video.muted = true;
+                });
+            });
+
+            // 备忘录翻转交互
+            const memoItems = document.querySelectorAll('.memo-item');
+            memoItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    item.classList.toggle('flipped');
+                });
+            });
+
+            // 联系按钮弹窗
+            const contactBtns = document.querySelectorAll('.control-btn[href]');
+            const popupOverlay = document.querySelector('.popup-overlay');
+            const popupImg = document.querySelector('.popup-img');
+            const popupCloseBtn = popupOverlay.querySelector('.close-btn');
+
+            contactBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const imgSrc = btn.querySelector('img').src;
+                    popupImg.src = imgSrc;
+                    popupOverlay.style.display = 'flex';
+                });
+            });
+
+            popupCloseBtn.addEventListener('click', () => popupOverlay.style.display = 'none');
+            popupOverlay.addEventListener('click', (e) => {
+                if (e.target === popupOverlay) popupOverlay.style.display = 'none';
+            });
+        });
+
+        // 屏蔽开发者工具
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S') ||
+                e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) {
+                e.preventDefault();
+                alert('源码保护，禁止查看！');
+            }
+        });
+    </script>
 </body>
-
 </html>

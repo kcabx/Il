@@ -1,328 +1,249 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mr.Krabs整合资源</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mr.Krabs 工具站</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'SF Pro Display', sans-serif;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body {
-            background: linear-gradient(45deg, #ffb6c1, #add8e6, #90ee90, #da70d6);
+            background: linear-gradient(135deg, #6b7280, #4b5e8e, #7c3aed, #db2777);
             background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            line-height: 1.6;
-        }
-
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 20px 0;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .section-title {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #333333;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            height: 3px;
-            width: 100px;
-            margin-top: 10px;
-            background: linear-gradient(90deg, #8c54e9, #4a90e2);
-        }
-
-        .resource-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .app-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .app-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
-        }
-
-        .app-icon {
-            width: 60px;
-            height: 60px;
-            margin: 10px auto;
-            background-size: cover;
-            border-radius: 10px;
-        }
-
-        .app-name {
-            font-size: 16px;
-            color: #666666;
-            margin: 5px 0;
-        }
-
-        .contact-btn {
-            display: inline-flex;
+            animation: macFlow 15s ease infinite;
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            margin: 0 10px;
-            transition: all 0.3s ease;
+            color: #fff;
             position: relative;
         }
 
-        .contact-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
+        @keyframes macFlow {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
         }
 
-        .contact-btn::before {
-            content: '';
+        /* 粒子背景 */
+        #particles {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 44px;
-            height: 44px;
-            background: rgba(0, 0, 0, 0.1);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
             border-radius: 50%;
-            z-index: -1;
+            animation: particleFloat 10s infinite ease-in-out;
         }
 
-        .contact-btn img {
-            width: 24px;
-            height: 24px;
-            filter: none;
+        @keyframes particleFloat {
+            0% { transform: translateY(0) scale(1); opacity: 0.5; }
+            50% { transform: translateY(-100vh) scale(1.5); opacity: 0.8; }
+            100% { transform: translateY(-200vh) scale(1); opacity: 0; }
         }
 
-        .gradient-text {
-        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96c93d, #ffd700);
-        background-size: 400% 400%;
-        animation: gradientFlow 8s ease infinite;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    /* 新增流光动画 */
-    @keyframes gradientFlow {
-        0% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-
-    /* 优化标题样式 */
-    .section-title {
-        font-size: 32px;
-        margin-bottom: 25px;
-        display: inline-block;
-        padding: 0 20px;
-        transition: all 0.3s ease;
-    }
-
-    /* 添加标题悬停效果 */
-    .section-title:hover {
-        transform: scale(1.05);
-        text-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-        .highlight {
-            color: #ff00ff;
-            font-weight: 500;
-        }
-
-        .resource-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .resource-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
-        }
-
-        .card-title {
-            font-size: 18px;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff00ff);
-            background-size: 400% 400%;
-            animation: textGradient 15s ease infinite;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .tool-btn {
-            display: block;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            padding: 8px 12px;
-            margin: 5px 0;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            background: linear-gradient(45deg, #ff7eb3,#ff758c,#ffb199,#ffcf7c );
-            background-size: 400% 400%;
-            animation: textGradient 15s ease infinite;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-        }
-        .tool-bvn {
-            display: block;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            padding: 8px 12px;
-            margin: 5px 0;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            background: linear-gradient(45deg, #ffcf7c,#ffb199,#ff758c,#ff7eb3 );
-            background-size: 400% 400%;
-            animation: textGradient 15s ease infinite;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-        }
-
-        .tool-btn:hover {
-            background: rgba(0, 0, 0, 0.3);
-            -webkit-text-fill-color: #fff;
-        }
-
-        .tool-list {
-            display: none;
-            margin-top: 10px;
-        }
-
-        .popup {
-            display: none;
+        .header {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-        }
-
-        .popup img {
-            max-width: 300px;
-            max-height: 300px;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #ff00ff);
+            background-size: 400% 400%;
+            animation: textGradient 8s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         @keyframes textGradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* 新增鼠标悬停显示工具列表的样式 */
-        .resource-card:hover .tool-list {
-            display: block;
-        }
-        /* 新增深色模式相关样式 */
-        :root {
-            --bg-color1: #09203f;
-            --bg-color2: #537895;
-            --bg-color3: #1b4965;
-            --bg-color4: #0b132b;
-        }
-
-        body.dark-mode {
-            --bg-color1: #000000;
-            --bg-color2: #000000;
-            --bg-color3: #000000;
-            --bg-color4: #000000;
-            animation: none !important;
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 80px 20px 100px;
+            position: relative;
+            z-index: 1;
         }
 
-        body {
-            background: linear-gradient(45deg,
-                var(--bg-color1),
-                var(--bg-color2),
-                var(--bg-color3),
-                var(--bg-color4));
-            /* 其他原有body样式保持不变 */
-        }
-
-        /* 新增开关按钮样式 */
-        .mode-toggle {
+        .audio-spectrum {
+            position: absolute;
+            width: 200px;
+            height: 200px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            width: 48px;
-            height: 48px;
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .spectrum-bars {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 10px;
+        }
+
+        .bar {
+            width: 4px;
+            background: linear-gradient(0deg, #ff6b6b, #4ecdc4, #45b7d1, #ff00ff);
+            background-size: 400% 400%;
+            animation: barDance 1s ease infinite alternate, gradientFlow 4s ease infinite;
+            border-radius: 2px;
+        }
+
+        @keyframes barDance {
+            0% { height: 20%; }
+            100% { height: 80%; }
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        .tool-ring {
+            width: 70vw;
+            max-width: 700px;
+            height: 70vw;
+            max-height: 700px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rotateRing 20s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes rotateRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tool-item {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tool-item:hover {
+            transform: scale(1.2);
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-item a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            text-align: center;
+            transform: rotate(0deg);
+            position: absolute;
+            width: 100%;
+            padding: 5px;
+        }
+
+        .tool-item:nth-child(1) { transform: translateY(-300px); }
+        .tool-item:nth-child(2) { transform: rotate(18deg) translateY(-300px); }
+        .tool-item:nth-child(3) { transform: rotate(36deg) translateY(-300px); }
+        .tool-item:nth-child(4) { transform: rotate(54deg) translateY(-300px); }
+        .tool-item:nth-child(5) { transform: rotate(72deg) translateY(-300px); }
+        .tool-item:nth-child(6) { transform: rotate(90deg) translateY(-300px); }
+        .tool-item:nth-child(7) { transform: rotate(108deg) translateY(-300px); }
+        .tool-item:nth-child(8) { transform: rotate(126deg) translateY(-300px); }
+        .tool-item:nth-child(9) { transform: rotate(144deg) translateY(-300px); }
+        .tool-item:nth-child(10) { transform: rotate(162deg) translateY(-300px); }
+        .tool-item:nth-child(11) { transform: rotate(180deg) translateY(-300px); }
+        .tool-item:nth-child(12) { transform: rotate(198deg) translateY(-300px); }
+        .tool-item:nth-child(13) { transform: rotate(216deg) translateY(-300px); }
+        .tool-item:nth-child(14) { transform: rotate(234deg) translateY(-300px); }
+        .tool-item:nth-child(15) { transform: rotate(252deg) translateY(-300px); }
+        .tool-item:nth-child(16) { transform: rotate(270deg) translateY(-300px); }
+        .tool-item:nth-child(17) { transform: rotate(288deg) translateY(-300px); }
+        .tool-item:nth-child(18) { transform: rotate(306deg) translateY(-300px); }
+        .tool-item:nth-child(19) { transform: rotate(324deg) translateY(-300px); }
+
+        .tool-item a {
+            transform: rotate(calc(-1 * (var(--angle)))); /* 反向旋转保持文字正向 */
+            --angle: 0deg;
+        }
+        .tool-item:nth-child(1) { --angle: 0deg; }
+        .tool-item:nth-child(2) { --angle: 18deg; }
+        .tool-item:nth-child(3) { --angle: 36deg; }
+        .tool-item:nth-child(4) { --angle: 54deg; }
+        .tool-item:nth-child(5) { --angle: 72deg; }
+        .tool-item:nth-child(6) { --angle: 90deg; }
+        .tool-item:nth-child(7) { --angle: 108deg; }
+        .tool-item:nth-child(8) { --angle: 126deg; }
+        .tool-item:nth-child(9) { --angle: 144deg; }
+        .tool-item:nth-child(10) { --angle: 162deg; }
+        .tool-item:nth-child(11) { --angle: 180deg; }
+        .tool-item:nth-child(12) { --angle: 198deg; }
+        .tool-item:nth-child(13) { --angle: 216deg; }
+        .tool-item:nth-child(14) { --angle: 234deg; }
+        .tool-item:nth-child(15) { --angle: 252deg; }
+        .tool-item:nth-child(16) { --angle: 270deg; }
+        .tool-item:nth-child(17) { --angle: 288deg; }
+        .tool-item:nth-child(18) { --angle: 306deg; }
+        .tool-item:nth-child(19) { --angle: 324deg; }
+
+        .dock {
+            position: fixed;
+            bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 10px;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .dock-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -330,205 +251,309 @@
             cursor: pointer;
         }
 
-        .mode-toggle:hover {
+        .dock-btn:hover {
+            transform: scale(1.2) translateY(-10px);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dock-btn img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 90vw;
+            max-height: 90vh;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            animation: popIn 0.5s ease;
         }
 
-        .toggle-icon {
-            width: 24px;
-            height: 24px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23ffffff" d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.65.13-1.33.22-2.02.27 1.91-1.57 3.12-3.94 3.12-6.61 0-4.42-3.58-8-8-8z"/></svg>');
+        @keyframes popIn {
+            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
-        body.dark-mode .toggle-icon {
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23ffffff" d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 2.95l-1.79-1.8-1.41 1.41 1.79 1.79 1.41-1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-2.95l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4z"/></svg>');
+        .contact-popup .popup-content {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .contact-popup .popup-left {
+            flex: 1;
+            color: #fff;
+        }
+
+        .contact-popup .popup-left p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .contact-popup .popup-right img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .info-popup p {
+            color: #fff;
+            margin: 10px 0;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .popup-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #8a3ab9, #2a5298);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .popup-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .highlight {
+            color: #ff00ff;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .tool-ring { width: 80vw; height: 80vw; }
+            .tool-item { width: 70px; height: 70px; font-size: 12px; }
+            .tool-item:nth-child(n) { transform: translateY(-200px) rotate(calc(18deg * (var(--n) - 1))); --n: 1; }
+            .tool-item:nth-child(2) { --n: 2; } .tool-item:nth-child(3) { --n: 3; }
+            .tool-item:nth-child(4) { --n: 4; } .tool-item:nth-child(5) { --n: 5; }
+            .tool-item:nth-child(6) { --n: 6; } .tool-item:nth-child(7) { --n: 7; }
+            .tool-item:nth-child(8) { --n: 8; } .tool-item:nth-child(9) { --n: 9; }
+            .tool-item:nth-child(10) { --n: 10; } .tool-item:nth-child(11) { --n: 11; }
+            .tool-item:nth-child(12) { --n: 12; } .tool-item:nth-child(13) { --n: 13; }
+            .tool-item:nth-child(14) { --n: 14; } .tool-item:nth-child(15) { --n: 15; }
+            .tool-item:nth-child(16) { --n: 16; } .tool-item:nth-child(17) { --n: 17; }
+            .tool-item:nth-child(18) { --n: 18; } .tool-item:nth-child(19) { --n: 19; }
+            .dock { padding: 5px; gap: 10px; }
+            .dock-btn { width: 50px; height: 50px; }
+            .dock-btn img { width: 30px; height: 30px; }
+            .header { font-size: 20px; }
+            .contact-popup { width: 90vw; }
+            .contact-popup .popup-content { flex-direction: column; }
+            .contact-popup .popup-right img { width: 120px; height: 120px; }
+            .audio-spectrum { width: 150px; height: 150px; }
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="card">
-            <h2 class="section-title gradient-text">Mr.Krabs 温馨提示</h2>
-            <div class="content-item tool-btn">
-                作者能力有限，只会 Kali Linux、Python、Pycharm、Html5、Css、JavaScript、Blender、FactoryIO...打不开就是未添加
-            </div>
-            <div class="content-item tool-bvn">
-                已安装过服务器容量 10T，存储了大量<span class="highlight">照片、视频、工作文件</span>等，所以网站不会部署到服务器
-            </div>
-            <div class="content-item tool-btn">
-                所有<span class="highlight">表白</span>工具均可按照情况<span class="highlight">免费</span>定制文字内容、展示效果、链接...如有需要请联系<span class="highlight">开发者</span>
-            </div>
-            <div style="display: flex; justify-content: center; margin-top: 20px;">
-                <a href="../Photo/qq.jpg" class="contact-btn show-popup">
-                    <img src="../Photo/qq.png" alt="QQ">
-                </a>
-                <a href="../Photo/wx.jpg" class="contact-btn show-popup">
-                    <img src="../Photo/wx.png" alt="WeChat">
-                </a>
+    <div id="particles"></div>
+
+    <div class="header">Mr.Krabs 工具站</div>
+
+    <div class="content-wrapper">
+        <div class="audio-spectrum">
+            <div class="spectrum-bars">
+                <div class="bar" style="animation-delay: 0s;"></div>
+                <div class="bar" style="animation-delay: 0.1s;"></div>
+                <div class="bar" style="animation-delay: 0.2s;"></div>
+                <div class="bar" style="animation-delay: 0.3s;"></div>
+                <div class="bar" style="animation-delay: 0.4s;"></div>
+                <div class="bar" style="animation-delay: 0.5s;"></div>
+                <div class="bar" style="animation-delay: 0.6s;"></div>
+                <div class="bar" style="animation-delay: 0.7s;"></div>
             </div>
         </div>
-        <div class="card">
-            <h2 class="section-title gradient-text">编程开发资源代码</h2>
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <h3 class="card-title">Python 好玩工具</h3>
-                    <div class="tool-list">
-                        <a href="#" class="tool-btn">3D爱心-表白</a>
-                        <a href="#" class="tool-btn">QQ自动发消息-消息轰炸</a>
-                        <a href="#" class="tool-btn">微信自动发消息-消息轰炸</a>
-                        <a href="#" class="tool-btn">网页爬虫-爬取网页源码</a>
-                        <a href="#" class="tool-btn">待添加...</a>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <h3 class="card-title">Html5 好玩告白工具</h3>
-                    <div class="tool-list">
-                        <a href="../行动派.html" class="tool-btn">行动派小表情</a>
-                        <a href="../main.html" class="tool-btn">粒子文字动画</a>
-                        <a href="kyzwlrm.html" class="tool-btn">可以做我恋人吗</a>
-                        <a href="3dphoto.html" class="tool-btn">3D相册恋人照片</a>
-                        <a href="#" class="tool-btn">待添加......</a>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <h3 class="card-title">Html5 玩机工具</h3>
-                    <div class="tool-list">
-                        <a href="about.html" class="tool-btn">毛玻璃登陆页面</a>
-                        <a href="sz.html" class="tool-btn">古罗盘时钟</a>
-                        <a href="../CSS/index.html" class="tool-btn">公安登陆系统UI...</a>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <h3 class="card-title">网络嗅探侦测</h3>
-                    <div class="tool-list">
-                        <a href="#" class="tool-btn">待添加...</a>
-                        <a href="#" class="tool-btn">待添加...</a>
-                        <a href="#" class="tool-btn">待添加...</a>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <h3 class="card-title">开发编程工具</h3>
-                    <div class="tool-list">
-                        <a href="#" class="tool-btn">待添加...</a>
-                        <a href="#" class="tool-btn">待添加...</a>
-                        <a href="#" class="tool-btn">待添加...</a>
-                        <a href="#" class="tool-btn">待添加...</a>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <h3 class="card-title">AI工具</h3>
-                    <div class="tool-list">
-                        <a href="#" class="tool-btn">待添加...</a>
-                        <a href="#" class="tool-btn">待添加...</a>
-                        <a href="#" class="tool-btn">待添加...</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <h2 class="section-title gradient-text">其他实用工具</h2>
-            <div class="resource-grid">
-                <div class="resource-card">
-                    <h3 class="card-title">系统维护工具</h3>
-                    <div class="tool-list">
-                        <a href="#" class="tool-btn">磁盘清理工具</a>
-                        <a href="#" class="tool-btn">注册表优化工具</a>
-                        <a href="#" class="tool-btn">进程监控工具</a>
-                        <a href="#" class="tool-btn">系统备份工具</a>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <h3 class="card-title">网络管理工具</h3>
-                    <div class="tool-list">
-                        <a href="#" class="tool-btn">网络速度测试</a>
-                        <a href="#" class="tool-btn">端口扫描工具</a>
-                        <a href="#" class="tool-btn">路由追踪工具</a>
-                        <a href="#" class="tool-btn">DNS解析工具</a>
-                    </div>
-                </div>
-            </div>
+        <div class="tool-ring">
+            <div class="tool-item"><a href="#">3D爱心-表白</a></div>
+            <div class="tool-item"><a href="#">QQ自动发消息</a></div>
+            <div class="tool-item"><a href="#">微信自动发消息</a></div>
+            <div class="tool-item"><a href="#">网页爬虫</a></div>
+            <div class="tool-item"><a href="../行动派.html">行动派表情</a></div>
+            <div class="tool-item"><a href="../main.html">粒子文字动画</a></div>
+            <div class="tool-item"><a href="kyzwlrm.html">做我恋人吗</a></div>
+            <div class="tool-item"><a href="3dphoto.html">3D相册</a></div>
+            <div class="tool-item"><a href="about.html">毛玻璃登陆</a></div>
+            <div class="tool-item"><a href="sz.html">古罗盘时钟</a></div>
+            <div class="tool-item"><a href="../CSS/index.html">公安系统UI</a></div>
+            <div class="tool-item"><a href="#">磁盘清理</a></div>
+            <div class="tool-item"><a href="#">注册表优化</a></div>
+            <div class="tool-item"><a href="#">进程监控</a></div>
+            <div class="tool-item"><a href="#">系统备份</a></div>
+            <div class="tool-item"><a href="#">网速测试</a></div>
+            <div class="tool-item"><a href="#">端口扫描</a></div>
+            <div class="tool-item"><a href="#">路由追踪</a></div>
+            <div class="tool-item"><a href="#">DNS解析</a></div>
         </div>
     </div>
-    <div class="popup">
-        <span class="close-btn">&times;</span>
-        <img src="" alt="二维码">
+
+    <div class="dock">
+        <div class="dock-btn" id="qq-btn">
+            <img src="../Photo/qq.png" alt="QQ">
+        </div>
+        <div class="dock-btn" id="wx-btn">
+            <img src="../Photo/wx.png" alt="WeChat">
+        </div>
+        <div class="dock-btn" id="info-btn">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23fff' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/></svg>" alt="Info">
+        </div>
+        <div class="dock-btn" id="refresh-btn">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23fff' d='M17.65 6.35A7.95 7.95 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z'/></svg>" alt="Refresh">
+        </div>
+        <div class="dock-btn" id="mute-btn">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23fff' d='M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z'/></svg>" alt="Mute">
+        </div>
+        <div class="dock-btn" id="top-btn">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23fff' d='M12 2l-8 8h5v12h6V10h5l-8-8z'/></svg>" alt="Top">
+        </div>
+        <div class="dock-btn" id="random-btn">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23fff' d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7v-1h10v1zm0-4H7v-1h10v1zm0-4H7V7h10v4z'/></svg>" alt="Random">
+        </div>
     </div>
+
+    <div class="popup contact-popup" id="qq-popup">
+        <div class="popup-content">
+            <div class="popup-left">
+                <p>姓名: Mr.Krabs</p>
+                <p>电话: 123-456-7890</p>
+                <p>邮箱: mrkrabs@example.com</p>
+            </div>
+            <div class="popup-right">
+                <img src="../Photo/qq.jpg" alt="QQ二维码">
+            </div>
+        </div>
+        <button class="popup-btn">关闭</button>
+    </div>
+
+    <div class="popup contact-popup" id="wx-popup">
+        <div class="popup-content">
+            <div class="popup-left">
+                <p>姓名: Mr.Krabs</p>
+                <p>电话: 123-456-7890</p>
+                <p>邮箱: mrkrabs@example.com</p>
+            </div>
+            <div class="popup-right">
+                <img src="../Photo/wx.jpg" alt="微信二维码">
+            </div>
+        </div>
+        <button class="popup-btn">关闭</button>
+    </div>
+
+    <div class="popup info-popup" id="info-popup">
+        <p>作者能力有限，只会 Kali Linux、Python、Pycharm、Html5、Css、JavaScript、Blender、FactoryIO...</p>
+        <p>已安装服务器容量 10T，存储了大量<span class="highlight">照片、视频、工作文件</span></p>
+        <p>所有<span class="highlight">表白</span>工具可<span class="highlight">免费</span>定制，联系<span class="highlight">开发者</span></p>
+        <button class="popup-btn">好的</button>
+    </div>
+
+    <audio id="bg-music" src="../music/loog.mp3" loop></audio>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const resourceCards = document.querySelectorAll('.resource-card');
-            resourceCards.forEach(card => {
-                card.addEventListener('click', function () {
-                    const toolList = this.querySelector('.tool-list');
-                    if (toolList.style.display === 'none') {
-                        toolList.style.display = 'block';
-                    } else {
-                        toolList.style.display = 'none';
-                    }
-                });
+        // 音乐控制
+        const audio = document.getElementById('bg-music');
+        audio.volume = 0.5;
+        let isMuted = false;
+
+        // 尝试自动播放，处理浏览器限制
+        function initAudio() {
+            audio.play().then(() => {
+                console.log("音乐播放成功");
+            }).catch(e => {
+                console.log("自动播放失败:", e);
+                document.addEventListener('click', function startAudio() {
+                    audio.play();
+                    document.removeEventListener('click', startAudio);
+                }, { once: true });
             });
+        }
+        initAudio();
 
-            const showPopupLinks = document.querySelectorAll('.show-popup');
-            const popup = document.querySelector('.popup');
-            const closeBtn = document.querySelector('.close-btn');
-            const popupImg = document.querySelector('.popup img');
+        // 弹窗控制
+        const qqPopup = document.getElementById('qq-popup');
+        const wxPopup = document.getElementById('wx-popup');
+        const infoPopup = document.getElementById('info-popup');
 
-            showPopupLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const imgSrc = this.getAttribute('href');
-                    popupImg.src = imgSrc;
-                    popup.style.display = 'block';
-                });
-            });
+        document.getElementById('qq-btn').addEventListener('click', () => {
+            qqPopup.style.display = 'block';
+        });
+        document.getElementById('wx-btn').addEventListener('click', () => {
+            wxPopup.style.display = 'block';
+        });
+        document.getElementById('info-btn').addEventListener('click', () => {
+            infoPopup.style.display = 'block';
+        });
 
-            closeBtn.addEventListener('click', function () {
-                popup.style.display = 'none';
-            });
-
-            window.addEventListener('click', function (e) {
-                if (e.target === popup) {
-                    popup.style.display = 'none';
-                }
+        document.querySelectorAll('.popup-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.style.display = 'none';
             });
         });
-        // 新增深色模式切换逻辑
-        document.addEventListener('DOMContentLoaded', function () {
-            const toggleBtn = document.createElement('div');
-            toggleBtn.className = 'contact-btn mode-toggle';
-            toggleBtn.innerHTML = '<div class="toggle-icon"></div>';
 
-            // 添加到按钮容器
-            const btnContainer = document.querySelector('.card > div[style]');
-            btnContainer.appendChild(toggleBtn);
-
-            // 模式切换功能
-            toggleBtn.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                // 保存用户偏好
-                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        document.querySelectorAll('.popup').forEach(popup => {
+            popup.addEventListener('click', e => {
+                if (e.target === popup) popup.style.display = 'none';
             });
+        });
 
-            // 初始化检查
-            if (localStorage.getItem('darkMode') === 'true') {
-                document.body.classList.add('dark-mode');
+        // Dock栏新功能
+        document.getElementById('refresh-btn').addEventListener('click', () => {
+            location.reload();
+        });
+
+        const muteBtn = document.getElementById('mute-btn');
+        muteBtn.addEventListener('click', () => {
+            if (isMuted) {
+                audio.play();
+                muteBtn.innerHTML = '<img src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\'><path fill=\'%23fff\' d=\'M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.06c1.48-.74 2.5-2.26 2.5-4.03zM12 2v9.11c-1.36.43-2.36 1.74-2.36 3.29 0 1.93 1.57 3.5 3.5 3.5s3.5-1.57 3.5-3.5c0-.26-.03-.52-.08-.77V2h-4zM3 9v6h4l5 5V4L7 9H3z\'/></svg>" alt="Play">';
+            } else {
+                audio.pause();
+                muteBtn.innerHTML = '<img src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\'><path fill=\'%23fff\' d=\'M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z\'/></svg>" alt="Mute">';
+            }
+            isMuted = !isMuted;
+        });
+
+        document.getElementById('top-btn').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.getElementById('random-btn').addEventListener('click', () => {
+            const tools = document.querySelectorAll('.tool-item a');
+            const randomTool = tools[Math.floor(Math.random() * tools.length)];
+            randomTool.click();
+        });
+
+        // 粒子效果
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // 开发者工具保护
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S'))) {
+                e.preventDefault();
+                alert('源码保护，禁止查看！');
             }
         });
-        // 禁用右键菜单
-document.addEventListener('contextmenu', event => event.preventDefault());
-
-// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
-document.addEventListener("keydown", function (event) {
-    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
-        event.preventDefault();
-        alert("源码保护，禁止查看！");
-    }
-    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
-        event.preventDefault();
-        alert("源码保护，禁止查看！");
-    }
-});
     </script>
 </body>
-
 </html>

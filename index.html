@@ -1,44 +1,440 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<!--马斯克同款无限制私人AI蟹老板 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>蟹老板欢迎您</title>
+    <title>Mr.Krabs欢迎您</title>
     <meta name="keywords" content="蟹老板">
     <meta name="description" content="蟹老板">
     <link rel="shortcut icon" href="https://qm.qq.com/q/1kaNhsMAoo">
-    <link rel="stylesheet" href="CSS/style.css" type="text/css" media="all" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: url('https://api.suyanw.cn/api/comic3.php') no-repeat center center fixed;
+            background-size: cover;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 动态背景粒子 */
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            animation: particlePulse 5s infinite ease-in-out;
+        }
+
+        @keyframes particlePulse {
+            0% { transform: scale(1) translateY(0); opacity: 0.7; }
+            50% { transform: scale(1.5) translateY(-50vh); opacity: 1; }
+            100% { transform: scale(1) translateY(-100vh); opacity: 0; }
+        }
+
+        /* 顶部标题 */
+        .header {
+            margin-top: 30px;
+            text-align: center;
+            color: #fff;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            padding: 12px 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            animation: glowPulse 3s ease-in-out infinite;
+            transition: transform 0.5s ease;
+        }
+
+        .header h1:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.8); }
+        }
+
+        .header h4 {
+            font-size: 1.3em;
+            font-weight: 500;
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            padding: 8px 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            animation: slideUp 1.5s ease-in-out;
+            transition: transform 0.5s ease;
+        }
+
+        .header h4:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* 中间精选框 */
+        .feature-box {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 25px;
+            max-width: 800px;
+            width: 85%;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: floatIn 1s ease-in-out;
+            z-index: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+            animation: rotateGlow 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .feature-box h2 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); }
+            50% { text-shadow: 0 0 20px rgba(255, 255, 255, 1); }
+        }
+
+        .feature-box p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .feature-btn {
+            width: 200px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            text-align: center;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        .feature-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .feature-btn:hover::after {
+            left: 150%;
+        }
+
+        /* Dock栏 */
+        .dock {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 15px;
+            display: flex;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+            z-index: 1000;
+            animation: dockSlide 1s ease-in-out;
+        }
+
+        @keyframes dockSlide {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .dock-btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .dock-btn:hover {
+            transform: scale(1.3) translateY(-15px);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .dock-btn img {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.4s ease;
+        }
+
+        .dock-btn:hover img {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .dock-btn::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .dock-btn:hover::before {
+            opacity: 1;
+        }
+
+        /* 炫酷警告风格弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(0, 0, 0, 0.8));
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.7), 0 0 60px rgba(255, 0, 0, 0.3);
+            max-width: 450px;
+            width: 80%;
+            animation: warningPulse 1.5s ease-in-out infinite, dropIn 0.5s ease-out;
+            border: 2px solid rgba(255, 0, 0, 0.5);
+        }
+
+        @keyframes dropIn {
+            from { transform: translate(-50%, -60%) scale(0.9); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 0, 0.7), 0 0 60px rgba(255, 0, 0, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(255, 0, 0, 1), 0 0 80px rgba(255, 0, 0, 0.5); }
+        }
+
+        .modal-content p {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #ff4500; /* 橙红色 */
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2em; padding: 10px 20px; }
+            .header h4 { font-size: 1.1em; padding: 6px 15px; }
+            .feature-box { width: 90%; padding: 15px; }
+            .feature-box h2 { font-size: 1.6em; }
+            .feature-btn { width: 150px; font-size: 0.9em; }
+            .dock { padding: 10px; gap: 15px; }
+            .dock-btn { width: 60px; height: 60px; }
+            .dock-btn img { width: 40px; height: 40px; }
+            .modal-content { width: 90%; padding: 20px; }
+            .modal-content p { font-size: 1.1em; }
+        }
+    </style>
 </head>
 <body>
-    <div class="glass-effect">
-        <h3>欢迎访问主页</h3>
-        <h4>Welcome to the homepage</h4>
-        <!-- 第一个按钮，点击打开主页面，这里假设主页面链接为 main.html -->
-        <a href="main.html" class="link-xx">粒子平滑告白</a>
-        <!-- 第二个按钮，点击跳转到你的QQ个人主页，需要你替换成真实的QQ个人主页链接 -->
-        <a href="行动派.html" class="link-xx">互动小组件</a>
-        <!-- 其他按钮，显示未开发，点击无反应 -->
-        <a href="main/index.html" class="link-xx">二级菜单选项</a>
-        <a href="uml/index.html" class="link-xx">三级综合面板</a>
-        <a href="uml/video.html" class="link-xx">共享图集</a>
-        <br><p class="foottitle">Mr.Krabs ©ShaoFa三个和尚网络传媒有限公司</p>
-    </div>
-    <script>
-        // 禁用右键菜单
-document.addEventListener('contextmenu', event => event.preventDefault());
+    <div id="particles"></div>
 
-// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
-document.addEventListener("keydown", function (event) {
-    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
-        event.preventDefault();
-        alert("源码保护，禁止查看！");
-    }
-    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
-        event.preventDefault();
-        alert("源码保护，禁止查看！");
-    }
-});
+    <div class="header">
+        <h1>欢迎访问主页</h1>
+        <h4>Welcome to the homepage</h4>
+    </div>
+
+    <div class="feature-box">
+        <h2>作者精选</h2>
+        <p>探索作者精心挑选的内容，涵盖创意视频、动听音乐和实用工具，等你发现！</p >
+        <div class="button-container">
+            <a href="./main.html" class="feature-btn">粒子组合</a >
+            <a href="./行动派.html" class="feature-btn">行动派小表情</a >
+            <a href="uml/3dphoto.html" class="feature-btn">3D恋人相册</a >
+            <a href="uml/kyzwlrm.html" class="feature-btn">可以做我恋人吗</a >
+            <a href="uml/sz.html" class="feature-btn">罗盘时钟</a >
+        </div>
+    </div>
+
+    <div class="dock">
+        <div class="dock-btn" id="main-btn">
+            <img src="./Photo/lz.png" alt="Main">
+        </div>
+        <div class="dock-btn" id="action-btn">
+            <img src="./Photo/xdp.png" alt="Action">
+        </div>
+        <div class="dock-btn" id="menu-btn">
+            <img src="./Photo/homepage.png" alt="Menu">
+        </div>
+        <div class="dock-btn" id="panel-btn">
+            <img src="./Photo/homepage1.png" alt="Panel">
+        </div>
+        <div class="dock-btn" id="gallery-btn">
+            <img src="./Photo/photo.png" alt="Gallery">
+        </div>
+    </div>
+
+    <!-- 炫酷警告风格弹窗 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <p>提示：以前的功能列表已移动到底部的Dock栏！</p >
+        </div>
+    </div>
+
+    <script>
+        // 粒子效果
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDelay = Math.random() * 3 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Dock栏功能
+        document.getElementById('main-btn').addEventListener('click', () => {
+            window.location.href = 'main.html';
+        });
+
+        document.getElementById('action-btn').addEventListener('click', () => {
+            window.location.href = '行动派.html';
+        });
+
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            window.location.href = 'main/index.html';
+        });
+
+        document.getElementById('panel-btn').addEventListener('click', () => {
+            window.location.href = 'uml/index.html';
+        });
+
+        document.getElementById('gallery-btn').addEventListener('click', () => {
+            window.location.href = 'uml/video.html';
+        });
+
+        // 弹窗控制
+        const modal = document.getElementById('modal');
+        window.onload = function() {
+            modal.style.display = 'block';
+        };
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // 禁用右键和开发者工具
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener("keydown", function (event) {
+            if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
+                event.preventDefault();
+                alert("源码保护，禁止查看！");
+            }
+            if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
+                event.preventDefault();
+                alert("源码保护，禁止查看！");
+            }
+        });
     </script>
 </body>
 </html>

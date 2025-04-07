@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>小树向你发送了一封对象邀请函</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font: inherit;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            color: #333;
+            font-size: 62.5%;
+        }
+
+        @media screen and (max-width: 480px) {
+            html {
+                font-size: 50%;
+            }
+        }
+
+        body {
+            font-size: 2rem;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'Rubik', sans-serif;
+            background-color: #f8f4ff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1);
+            box-shadow: 0 0 10px rgba(255, 154, 158, 0.5);
+            animation: float 15s infinite linear;
+        }
+
+        .mouse-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff9a9e, #a18cd1);
+            box-shadow: 0 0 8px rgba(161, 140, 209, 0.7);
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title {
+            margin-bottom: 1rem;
+            color: #a18cd1;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            color: #888;
+            text-align: center;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .button {
+            color: #fff;
+            border-radius: 1rem;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            min-width: 10rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: none;
+            outline: none;
+        }
+
+        .button-accept {
+            background: linear-gradient(to right, #a18cd1, #fbc2eb);
+        }
+
+        .button-accept:hover {
+            background: linear-gradient(to right, #fbc2eb, #a18cd1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(161, 140, 209, 0.3);
+        }
+
+        .button-reject {
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+        }
+
+        .button-reject:hover {
+            background: linear-gradient(to right, #ff7eb3, #ff758c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 117, 140, 0.3);
+        }
+
+        .boi {
+            --happiness: 0.9;
+            --derp: 1;
+            --px: 0.5;
+            --py: 0.5;
+            width: 22rem;
+            max-width: 80vw;
+            height: 22rem;
+            background-image: radial-gradient(#f7e0b2, #eb5);
+            border-radius: 100%;
+            overflow: hidden;
+            position: relative;
+            margin: 2rem 0;
+            border: solid 2px #ecb23e;
+            box-shadow: 0 10px 30px rgba(235, 85, 85, 0.2);
+        }
+
+        .boi * {
+            position: absolute;
+        }
+
+        .boi::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: linear-gradient(to bottom, #5a8, rgba(85, 170, 136, 0));
+            opacity: calc(1 - var(--happiness));
+        }
+
+        .boi-blush {
+            width: 20%;
+            height: 10%;
+            background-color: rgba(255, 100, 100, 0.3);
+            border: 3px solid rgba(255, 100, 100, 0.3);
+            top: calc(45% + var(--py) * 10%);
+            border-radius: 100%;
+            opacity: calc(var(--happiness) * var(--happiness) * 0.9 + 0.1);
+        }
+
+        .boi-blush-left {
+            left: calc(7% + var(--px) * 2%);
+        }
+
+        .boi-blush-right {
+            right: calc(9% - var(--px) * 2%);
+        }
+
+        .boi-eye {
+            width: calc(26% - var(--happiness) * 2%);
+            height: calc(26% - var(--happiness) * 2%);
+            background-color: #f6f6f6;
+            border-radius: 100%;
+            top: calc(25% + var(--py) * 10%);
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .boi-eye-left {
+            left: calc(18% + var(--px) * 4%);
+        }
+
+        .boi-eye-left::after {
+            transform: translate(calc((var(--px) + var(--derp) * 0.5) * 100%), calc((var(--py) + var(--derp) * 0.5) * 100%));
+        }
+
+        .boi-eye-right {
+            right: calc(22% - var(--px) * 4%);
+        }
+
+        .boi-eye-right::after {
+            transform: translate(calc((var(--px) + var(--derp) * -0.3) * 100%), calc((var(--py) + var(--derp) * -0.3) * 100%));
+        }
+
+        .boi-eye::after {
+            content: '';
+            display: block;
+            background-color: #421;
+            width: calc(55% - var(--happiness) * 10%);
+            height: calc(55% - var(--happiness) * 10%);
+            border-radius: 100%;
+        }
+
+        .boi-mouth {
+            width: calc(51% - var(--happiness) * 2%);
+            height: calc(26% - var(--happiness) * 2%);
+            background-color: #a33;
+            border-radius: calc((1 - var(--happiness)) * 10em) calc((1 - var(--happiness)) * 10em) calc(var(--happiness) * 16em) calc(var(--happiness) * 16em);
+            top: calc(57.5% + var(--py) * 5%);
+            left: calc(47.5% + var(--px) * 5%);
+            transform: translateX(-50%);
+            overflow: hidden;
+            border: 3px solid #962d2d;
+            -webkit-mask-image: -webkit-radial-gradient(white, black);
+        }
+
+        .boi-mouth::before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 20%;
+            height: 20%;
+            top: 0;
+            left: 50%;
+            background-color: white;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+
+        .boi-mouth::after {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 60%;
+            height: 50%;
+            left: 10%;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 20rem 20rem 0 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff758c;
+            opacity: 0;
+            animation: hearts 3s ease-out infinite;
+        }
+
+        @keyframes hearts {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0.5);
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.2);
+            }
+        }
+
+        .message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+            max-width: 80%;
+            text-align: center;
+            display: none;
+        }
+
+        .message-title {
+            color: #a18cd1;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .message-subtitle {
+            color: #888;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .message-button {
+            background: linear-gradient(to right, #a18cd1, #fbc2eb);
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            padding: 1rem 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .message-button:hover {
+            background: linear-gradient(to right, #fbc2eb, #a18cd1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(161, 140, 209, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 粒子背景 -->
+    <div class="particles" id="particles"></div>
+
+    <!-- 鼠标跟随粒子 -->
+    <div id="mouseParticles"></div>
+
+    <!-- 爱心效果 -->
+    <div class="hearts" id="hearts"></div>
+
+    <!-- 主内容 -->
+    <div class="content" id="mainContent">
+        <h1 class="title">小树向你发送了一封对象邀请函</h1>
+        <h2 class="subtitle">小树希望你成为ta的对象，是否接受？</h2>
+
+        <figure class="boi" style="--happiness:0.9; --derp:1; --px:0.5; --py:0.5;">
+            <div class="boi-blush boi-blush-left"></div>
+            <div class="boi-blush boi-blush-right"></div>
+            <div class="boi-eye boi-eye-left"></div>
+            <div class="boi-eye boi-eye-right"></div>
+            <div class="boi-mouth"></div>
+        </figure>
+
+        <div class="buttons">
+            <button class="button button-accept" id="btnAccept">接受</button>
+            <button class="button button-reject" id="btnReject">拒绝</button>
+        </div>
+    </div>
+
+    <!-- 接受消息 -->
+    <div class="message" id="acceptedMessage">
+        <h2 class="message-title">恭喜你们成为对象！</h2>
+        <p class="message-subtitle">小树非常开心，祝你们幸福快乐！</p>
+        <button class="message-button" id="btnBackFromAccept">返回</button>
+    </div>
+
+    <!-- 拒绝消息 -->
+    <div class="message" id="rejectedMessage">
+        <h2 class="message-title">小树有点难过...</h2>
+        <p class="message-subtitle">但小树尊重你的决定，祝你一切顺利！</p>
+        <button class="message-button" id="btnBackFromReject">返回</button>
+    </div>
+
+    <script>
+        // 背景粒子效果
+        const particlesContainer = document.getElementById('particles');
+        const colors = ['#ff9a9e', '#fad0c4', '#a18cd1', '#fbc2eb', '#ff758c'];
+
+        for (let i = 0; i < 50; i++) {
+            createParticle();
+        }
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = Math.random() * 100 + 'vh';
+            particle.style.width = Math.random() * 8 + 4 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = `linear-gradient(45deg, ${colors[Math.floor(Math.random() * colors.length)]}, ${colors[Math.floor(Math.random() * colors.length)]})`;
+            particle.style.animationDuration = Math.random() * 15 + 10 + 's';
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // 鼠标跟随粒子效果
+        const mouseParticlesContainer = document.getElementById('mouseParticles');
+        let mouseX = 0;
+        let mouseY = 0;
+        let particles = [];
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // 创建跟随鼠标的粒子
+            if (Math.random() > 0.7) {
+                createMouseParticle(mouseX, mouseY);
+            }
+        });
+
+        function createMouseParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'mouse-particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = Math.random() * 8 + 4 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = `linear-gradient(45deg, ${colors[Math.floor(Math.random() * colors.length)]}, ${colors[Math.floor(Math.random() * colors.length)]})`;
+            mouseParticlesContainer.appendChild(particle);
+
+            // 粒子动画
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 3 + 2;
+            const lifetime = Math.random() * 1000 + 500;
+
+            const particleObj = {
+                element: particle,
+                x: x,
+                y: y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                birth: Date.now(),
+                lifetime: lifetime
+            };
+
+            particles.push(particleObj);
+
+            // 移除粒子
+            setTimeout(() => {
+                particle.remove();
+                particles = particles.filter(p => p !== particleObj);
+            }, lifetime);
+        }
+
+        // 更新粒子位置
+        function updateParticles() {
+            const now = Date.now();
+            particles.forEach(particle => {
+                const age = now - particle.birth;
+                const progress = age / particle.lifetime;
+
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.vy += 0.1; // 重力效果
+
+                particle.element.style.left = particle.x + 'px';
+                particle.element.style.top = particle.y + 'px';
+                particle.element.style.opacity = 1 - progress;
+            });
+
+            requestAnimationFrame(updateParticles);
+        }
+
+        updateParticles();
+
+        // 爱心效果
+        const heartsContainer = document.getElementById('hearts');
+
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤';
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+            heart.style.animationDuration = Math.random() * 2 + 2 + 's';
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        }
+
+        // 主逻辑
+        const mainContent = document.getElementById('mainContent');
+        const acceptedMessage = document.getElementById('acceptedMessage');
+        const rejectedMessage = document.getElementById('rejectedMessage');
+        const btnAccept = document.getElementById('btnAccept');
+        const btnReject = document.getElementById('btnReject');
+        const btnBackFromAccept = document.getElementById('btnBackFromAccept');
+        const btnBackFromReject = document.getElementById('btnBackFromReject');
+        const boi = document.querySelector('.boi');
+
+        const current = {
+            happiness: 0.9,
+            derp: 1,
+            px: 0.5,
+            py: 0.5
+        };
+        const target = { ...current };
+        let rejectCount = 0;
+
+        // 鼠标移动效果
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+
+            const btnAcceptRect = btnAccept.getBoundingClientRect();
+            const btnRejectRect = btnReject.getBoundingClientRect();
+
+            const dx1 = x - btnRejectRect.left - btnRejectRect.width / 2;
+            const dy1 = y - btnRejectRect.top - btnRejectRect.height / 2;
+            const dx2 = x - btnAcceptRect.left - btnAcceptRect.width / 2;
+            const dy2 = y - btnAcceptRect.top - btnAcceptRect.height / 2;
+
+            const px = x / window.innerWidth;
+            const py = y / window.innerHeight;
+
+            const distReject = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+            const distAccept = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+            const happiness = Math.pow(distReject / (distAccept + distReject), 0.75);
+
+            target.happiness = happiness;
+            target.derp = 0;
+            target.px = px;
+            target.py = py;
+        });
+
+        // 按钮事件
+        btnAccept.addEventListener('click', () => {
+            mainContent.style.display = 'none';
+            acceptedMessage.style.display = 'block';
+            target.happiness = 1;
+
+            // 创建爱心效果
+            const rect = boi.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createHeart(
+                        centerX + (Math.random() - 0.5) * 50,
+                        centerY + (Math.random() - 0.5) * 50
+                    );
+                }, i * 100);
+            }
+        });
+
+        btnReject.addEventListener('click', () => {
+            rejectCount++;
+
+            if (rejectCount >= 5) {
+                btnReject.style.position = 'fixed';
+                btnReject.style.left = `${Math.random() * 80}%`;
+                btnReject.style.top = `${Math.random() * 80}%`;
+            }
+
+            target.happiness = Math.max(0.1, target.happiness - 0.1);
+            btnAccept.style.transform = `scale(${1 + rejectCount * 0.1})`;
+
+            if (rejectCount > 10) {
+                mainContent.style.display = 'none';
+                rejectedMessage.style.display = 'block';
+            }
+        });
+
+        btnBackFromAccept.addEventListener('click', () => {
+            acceptedMessage.style.display = 'none';
+            mainContent.style.display = 'flex';
+            resetBoi();
+        });
+
+        btnBackFromReject.addEventListener('click', () => {
+            rejectedMessage.style.display = 'none';
+            mainContent.style.display = 'flex';
+            resetBoi();
+        });
+
+        function resetBoi() {
+            target.happiness = 0.9;
+            target.derp = 1;
+            target.px = 0.5;
+            target.py = 0.5;
+            rejectCount = 0;
+            btnAccept.style.transform = 'scale(1)';
+            btnReject.style.position = 'static';
+        }
+
+        // 更新表情
+        function updateBoi() {
+            for (let prop in target) {
+                if (target[prop] === current[prop]) {
+                    continue;
+                } else if (Math.abs(target[prop] - current[prop]) < 0.01) {
+                    current[prop] = target[prop];
+                } else {
+                    current[prop] += (target[prop] - current[prop]) * 0.1;
+                }
+                boi.style.setProperty(`--${prop}`, current[prop]);
+            }
+            requestAnimationFrame(updateBoi);
+        }
+
+        updateBoi();
+    </script>
+</body>
+</html>

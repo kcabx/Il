@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络测速工具 - macOS 风格</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #2ecc71, #ff6b6b, #f1c40f, #a29bfe, #74b9ff, #2ecc71);
+            background-size: 600%;
+            animation: gradient 20s ease infinite;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        /* 动态渐变背景 */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 毛玻璃胶囊标题 */
+        .title {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            color: #fff;
+            font-size: 40px;
+            font-weight: 700;
+            padding: 12px 40px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .title:hover {
+            transform: translateX(-50%) scale(1.05) rotate(2deg);
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 32px;
+                padding: 10px 30px;
+            }
+        }
+
+        /* 毛玻璃容器 */
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+            margin-top: 80px; /* 留出标题空间 */
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                width: 95%;
+                margin-top: 60px;
+            }
+        }
+
+        /* 速度显示区域 */
+        .speed-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .speed-column {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .speed-column h2 {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .speed-value {
+            font-size: 28px;
+            color: #fff;
+            font-weight: 600;
+            margin: 5px 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .speed-unit {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-left: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .speed-column h2 {
+                font-size: 16px;
+            }
+            .speed-value {
+                font-size: 24px;
+            }
+            .speed-unit {
+                font-size: 12px;
+            }
+        }
+
+        /* 折线图 */
+        .chart-container {
+            width: 100%;
+            text-align: center;
+        }
+
+        canvas {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            width: 100%;
+            height: 200px;
+        }
+
+        @media (max-width: 768px) {
+            canvas {
+                height: 150px;
+            }
+        }
+
+        /* 按钮样式 */
+        .start-btn {
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+        }
+
+        .start-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .start-btn {
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+        }
+
+        /* 状态文本 */
+        .status {
+            color: #fff;
+            font-size: 14px;
+            margin-top: 10px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .status {
+                font-size: 12px;
+            }
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+            font-size: 18px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transform: scale(0.8);
+            animation: pop 0.5s ease forwards;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content p {
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                font-size: 16px;
+                padding: 15px;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- 毛玻璃胶囊标题（页面顶部） -->
+    <div class="title">网络测速</div>
+
+    <!-- 毛玻璃容器 -->
+    <div class="container">
+        <!-- 速度显示区域 -->
+        <div class="speed-container">
+            <!-- 下载速度 -->
+            <div class="speed-column">
+                <h2>下载速度</h2>
+                <div class="speed-value"><span id="download-mbps">92.2</span> <span class="speed-unit">Mbps</span></div>
+                <div class="speed-value"><span id="download-mbs">12.4</span> <span class="speed-unit">MB/s</span></div>
+                <div class="speed-value"><span id="download-kbs">12400.2</span> <span class="speed-unit">KB/s</span></div>
+            </div>
+
+            <!-- 上传速度 -->
+            <div class="speed-column">
+                <h2>上传速度</h2>
+                <div class="speed-value"><span id="upload-mbps">26.9</span> <span class="speed-unit">Mbps</span></div>
+                <div class="speed-value"><span id="upload-mbs">3.4</span> <span class="speed-unit">MB/s</span></div>
+                <div class="speed-value"><span id="upload-kbs">3366.0</span> <span class="speed-unit">KB/s</span></div>
+            </div>
+        </div>
+
+        <!-- 折线图 -->
+        <div class="chart-container">
+            <canvas id="speedChart"></canvas>
+            <button class="start-btn pulse" onclick="showNetworkInfo()" id="startBtn">开始测试</button>
+            <div class="status" id="status">点击开始测试你的网络速度</div>
+        </div>
+    </div>
+
+    <!-- 网络信息弹窗 -->
+    <div class="modal" id="networkModal">
+        <div class="modal-content">
+            <p id="networkInfo">已获取当前为：WiFi（联通，5G）</p>
+        </div>
+    </div>
+
+    <script>
+        let isTesting = false;
+        const downloadMbps = document.getElementById('download-mbps');
+        const downloadMbs = document.getElementById('download-mbs');
+        const downloadKbs = document.getElementById('download-kbs');
+        const uploadMbps = document.getElementById('upload-mbps');
+        const uploadMbs = document.getElementById('upload-mbs');
+        const uploadKbs = document.getElementById('upload-kbs');
+        const status = document.getElementById('status');
+        const startBtn = document.getElementById('startBtn');
+        const canvas = document.getElementById('speedChart');
+        const ctx = canvas.getContext('2d');
+        const networkModal = document.getElementById('networkModal');
+        const networkInfo = document.getElementById('networkInfo');
+
+        // 动态设置 canvas 大小
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth - 40; // 减去 padding
+            canvas.height = window.innerWidth > 768 ? 200 : 150;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 折线图数据
+        const downloadDataPoints = [];
+        const uploadDataPoints = [];
+        const maxDataPoints = 70; // 最多显示 70 个数据点
+        let downloadSpeed = 0;
+        let uploadSpeed = 0;
+        let lastTime = 0;
+
+        // 初始化折线图
+        function initChart() {
+            ctx.strokeStyle = '#4a90e2';
+            ctx.lineWidth = 2;
+        }
+
+        // 绘制折线图
+        function drawChart() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 绘制背景网格
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            for (let i = 0; i <= 200; i += 50) {
+                ctx.moveTo(0, canvas.height - (i / 200) * canvas.height);
+                ctx.lineTo(canvas.width, canvas.height - (i / 200) * canvas.height);
+                ctx.stroke();
+            }
+
+            // 绘制下载速度折线（蓝色）
+            ctx.strokeStyle = '#4a90e2';
+            if (downloadDataPoints.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height - (downloadDataPoints[0] / 200) * canvas.height);
+                for (let i = 1; i < downloadDataPoints.length; i++) {
+                    const x = (i / (maxDataPoints - 1)) * canvas.width;
+                    const y = canvas.height - (downloadDataPoints[i] / 200) * canvas.height;
+                    ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+
+            // 绘制上传速度折线（绿色）
+            ctx.strokeStyle = '#2ecc71';
+            if (uploadDataPoints.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height - (uploadDataPoints[0] / 200) * canvas.height);
+                for (let i = 1; i < uploadDataPoints.length; i++) {
+                    const x = (i / (maxDataPoints - 1)) * canvas.width;
+                    const y = canvas.height - (uploadDataPoints[i] / 200) * canvas.height;
+                    ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        // 模拟获取网络信息
+        function getNetworkInfo() {
+            // 模拟网络类型、运营商和制式（实际需要后端支持）
+            const networkTypes = ['WiFi', '流量', '热点'];
+            const operators = ['联通', '移动', '电信'];
+            const generations = ['4G', '5G', '6G'];
+
+            const networkType = networkTypes[Math.floor(Math.random() * networkTypes.length)];
+            const operator = operators[Math.floor(Math.random() * operators.length)];
+            const generation = generations[Math.floor(Math.random() * generations.length)];
+
+            return `${networkType}（${operator}，${generation}）`;
+        }
+
+        // 显示网络信息弹窗
+        function showNetworkInfo() {
+            const info = getNetworkInfo();
+            networkInfo.textContent = `已获取当前为：${info}`;
+            networkModal.classList.add('show');
+
+            // 2 秒后关闭弹窗并开始测试
+            setTimeout(() => {
+                networkModal.classList.remove('show');
+                startTest();
+            }, 2000);
+        }
+
+        // 开始测试
+        function startTest() {
+            if (isTesting) return;
+            isTesting = true;
+            startBtn.disabled = true;
+            startBtn.classList.remove('pulse');
+            startBtn.style.background = '#666';
+            status.textContent = '正在测试...';
+
+            // 重置数据
+            downloadSpeed = 0;
+            uploadSpeed = 0;
+            downloadDataPoints.length = 0;
+            uploadDataPoints.length = 0;
+            downloadMbps.textContent = '0.0';
+            downloadMbs.textContent = '0.0';
+            downloadKbs.textContent = '0.0';
+            uploadMbps.textContent = '0.0';
+            uploadMbs.textContent = '0.0';
+            uploadKbs.textContent = '0.0';
+            drawChart();
+
+            // 模拟测速过程
+            const maxDownloadSpeed = Math.random() * 150 + 50; // 随机生成 50-200 Mbps 的下载速度
+            const maxUploadSpeed = Math.random() * 50 + 10; // 随机生成 10-60 Mbps 的上传速度
+            const testDuration = 5000; // 测试持续 5 秒
+            let startTime = performance.now();
+
+            function update(timestamp) {
+                if (!isTesting) return;
+
+                const elapsed = timestamp - startTime;
+                const progress = Math.min(elapsed / testDuration, 1);
+
+                // 模拟速度波动
+                downloadSpeed = Math.min(maxDownloadSpeed, downloadSpeed + (Math.random() * 20 - 10));
+                uploadSpeed = Math.min(maxUploadSpeed, uploadSpeed + (Math.random() * 10 - 5));
+                downloadSpeed = Math.max(0, downloadSpeed);
+                uploadSpeed = Math.max(0, uploadSpeed);
+
+                // 更新下载速度
+                downloadMbps.textContent = downloadSpeed.toFixed(1);
+                downloadMbs.textContent = (downloadSpeed / 8).toFixed(1);
+                downloadKbs.textContent = (downloadSpeed * 125).toFixed(1);
+
+                // 更新上传速度
+                uploadMbps.textContent = uploadSpeed.toFixed(1);
+                uploadMbs.textContent = (uploadSpeed / 8).toFixed(1);
+                uploadKbs.textContent = (uploadSpeed * 125).toFixed(1);
+
+                // 更新折线图
+                downloadDataPoints.push(downloadSpeed);
+                uploadDataPoints.push(uploadSpeed);
+                if (downloadDataPoints.length > maxDataPoints) {
+                    downloadDataPoints.shift();
+                    uploadDataPoints.shift();
+                }
+                drawChart();
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    isTesting = false;
+                    startBtn.disabled = false;
+                    startBtn.style.background = '#4a90e2';
+                    startBtn.classList.add('pulse');
+                    status.textContent = `测试完成！下载：${downloadSpeed.toFixed(1)} Mbps，上传：${uploadSpeed.toFixed(1)} Mbps`;
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // 初始化折线图
+        initChart();
+    </script>
+</body>
+</html>

@@ -401,6 +401,8 @@
         <button class="message-button" id="btnBackFromReject">返回</button>
     </div>
 
+        <audio id="bg-music" src="../music/bog.mp3" loop></audio>
+
     <script>
         // 背景粒子效果
         const particlesContainer = document.getElementById('particles');
@@ -634,6 +636,24 @@
         }
 
         updateBoi();
+        // 音乐控制
+        const audio = document.getElementById('bg-music');
+        audio.volume = 0.5;
+        let isMuted = false;
+
+        // 尝试自动播放，处理浏览器限制
+        function initAudio() {
+            audio.play().then(() => {
+                console.log("音乐播放成功");
+            }).catch(e => {
+                console.log("自动播放失败:", e);
+                document.addEventListener('click', function startAudio() {
+                    audio.play();
+                    document.removeEventListener('click', startAudio);
+                }, { once: true });
+            });
+        }
+        initAudio();
     </script>
 </body>
 </html>

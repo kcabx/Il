@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Mr.Krabs3D恋人相册</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: no-repeat center center fixed;
+            background-size: cover;
+            perspective: 1000px; /* 增强3D透视效果 */
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #wrap {
+            position: relative;
+            width: 120px;
+            height: 180px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease-out; /* 平滑过渡 */
+        }
+
+        #wrap img {
+            position: absolute;
+            width: 133px;
+            height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            -webkit-box-reflect: below 5px linear-gradient(to bottom, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.4) 100%);
+            object-fit: cover;
+            transition: transform 0.3s ease, opacity 0.3s ease; /* 交互动画 */
+        }
+
+        #wrap img:hover {
+            transform: scale(1.1) translateZ(50px); /* 鼠标悬停放大 */
+            opacity: 1;
+            z-index: 10;
+        }
+
+        #wrap p {
+            position: absolute;
+            left: 50%;
+            top: 120%;
+            width: 1200px;
+            height: 1200px;
+            margin-left: -600px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(122, 122, 122, 0.3), transparent);
+            transform: rotateX(85deg);
+            pointer-events: none; /* 避免干扰交互 */
+        }
+
+        @media (max-width: 768px) {
+            #wrap {
+                width: 100px;
+                height: 150px;
+            }
+            #wrap img {
+                width: 100px;
+                height: 150px;
+            }
+            #wrap p {
+                width: 800px;
+                height: 800px;
+                margin-left: -400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <img src="../Photo/1.jpg" alt="" />
+        <img src="../Photo/2.jpg" alt="" />
+        <img src="../Photo/3.jpg" alt="" />
+        <img src="../Photo/4.jpg" alt="" />
+        <img src="../Photo/5.jpg" alt="" />
+        <img src="../Photo/6.jpg" alt="" />
+        <img src="../Photo/7.jpg" alt="" />
+        <img src="../Photo/8.jpg" alt="" />
+        <img src="../Photo/9.jpg" alt="" />
+        <img src="../Photo/10.jpg" alt="" />
+        <img src="../Photo/11.jpg" alt="" />
+        <p></p>
+    </div>
+    <script type="text/javascript">
+        // 随机背景
+        const backgroundImages = [
+            '../Photo/backjped.jpg',
+            '../Photo/bj2.jpg',
+            '../Photo/bj3.jpg'
+        ];
+        const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+        document.body.style.backgroundImage = `url(${randomImage})`;
+
+        const oWrap = document.getElementById("wrap");
+        const aImg = oWrap.getElementsByTagName("img");
+        const len = aImg.length;
+        const Deg = 360 / len;
+
+        // 初始化图片位置
+        for (let i = 0; i < len; i++) {
+            aImg[i].style.transform = `rotateY(${i * Deg}deg) translateZ(350px)`;
+            aImg[i].style.transition = `transform 1s ${0.1 * (len - 1 - i)}s`;
+        }
+
+        // 自适应居中
+        function adjustPosition() {
+            const H = window.innerHeight;
+            oWrap.style.marginTop = `${(H - 180) / 2}px`;
+        }
+        adjustPosition();
+        window.addEventListener('resize', adjustPosition);
+
+        // 鼠标和触摸交互
+        let roX = 0, roY = 0, lastX, lastY, minX = 0, minY = 0;
+        let isDragging = false;
+
+        function updateRotation() {
+            oWrap.style.transform = `rotateX(${roX}deg) rotateY(${roY}deg)`;
+            if (isDragging) return;
+            minX *= 0.95;
+            minY *= 0.95;
+            roY += minX * 0.2;
+            roX -= minY * 0.1;
+            if (Math.abs(minX) > 0.1 || Math.abs(minY) > 0.1) {
+                requestAnimationFrame(updateRotation);
+            }
+        }
+
+        // 鼠标事件
+        document.addEventListener('mousedown', (ev) => {
+            isDragging = true;
+            lastX = ev.clientX;
+            lastY = ev.clientY;
+            ev.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (ev) => {
+            if (!isDragging) return;
+            const nowX = ev.clientX;
+            const nowY = ev.clientY;
+            minX = nowX - lastX;
+            minY = nowY - lastY;
+            roY += minX * 0.2;
+            roX -= minY * 0.1;
+            oWrap.style.transform = `rotateX(${roX}deg) rotateY(${roY}deg)`;
+            lastX = nowX;
+            lastY = nowY;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            requestAnimationFrame(updateRotation);
+        });
+
+        // 触摸事件（多端适配）
+        document.addEventListener('touchstart', (ev) => {
+            isDragging = true;
+            lastX = ev.touches[0].clientX;
+            lastY = ev.touches[0].clientY;
+        });
+
+        document.addEventListener('touchmove', (ev) => {
+            if (!isDragging) return;
+            const nowX = ev.touches[0].clientX;
+            const nowY = ev.touches[0].clientY;
+            minX = nowX - lastX;
+            minY = nowY - lastY;
+            roY += minX * 0.2;
+            roX -= minY * 0.1;
+            oWrap.style.transform = `rotateX(${roX}deg) rotateY(${roY}deg)`;
+            lastX = nowX;
+            lastY = nowY;
+            ev.preventDefault();
+        });
+
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+            requestAnimationFrame(updateRotation);
+        });
+
+        // 禁用右键和开发者工具
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey && ['u', 'U', 's', 'S'].includes(e.key)) ||
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && ['I', 'J'].includes(e.key))) {
+                e.preventDefault();
+                alert('源码保护，禁止查看！');
+            }
+        });
+    </script>
+</body>
+</html>

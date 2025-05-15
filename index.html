@@ -6,6 +6,7 @@
     <title>Mr.Krabs欢迎您</title>
     <meta name="keywords" content="蟹老板">
     <meta name="description" content="蟹老板">
+    <meta name="robots" content="noindex, nofollow">
     <link rel="shortcut icon" href="https://qm.qq.com/q/1kaNhsMAoo">
     <style>
         * {
@@ -59,14 +60,67 @@
             100% { transform: scale(1) translateY(-100vh); opacity: 0; }
         }
 
-        /* 顶部标题 */
-        .header {
-            margin-top: 30px;
-            text-align: center;
+        /* 顶部标题 - 新Logo样式 */
+        #animated-logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2em; /* 调整整体大小 */
+            font-weight: 700;
             color: #fff;
-            z-index: 1;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            padding: 15px 30px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            animation: logoGlowPulse 3s ease-in-out infinite;
+            transition: transform 0.5s ease;
+            cursor: default; /* 通常Logo不可点击，除非有链接 */
         }
 
+        #animated-logo-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5), 0 0 25px rgba(255,255,255,0.7);
+        }
+
+        @keyframes logoGlowPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 5px 20px rgba(0, 0, 0, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 5px 20px rgba(0, 0, 0, 0.4); }
+        }
+
+        .logo-char {
+            opacity: 0;
+            animation: fadeInChar 0.5s ease-out forwards;
+            margin: 0 2px; /*字间距*/
+            display: inline-block; /* 使transform生效 */
+            transition: transform 0.3s ease;
+        }
+
+        #animated-logo-container:hover .logo-char {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        /* 为每个字设置不同的动画延迟 */
+        .logo-char:nth-child(1) { animation-delay: 0.1s; }
+        .logo-char:nth-child(2) { animation-delay: 0.2s; }
+        .logo-char:nth-child(3) { animation-delay: 0.3s; }
+        .logo-char:nth-child(4) { animation-delay: 0.4s; }
+        .logo-char:nth-child(5) { animation-delay: 0.5s; }
+        .logo-char:nth-child(6) { animation-delay: 0.6s; }
+        .logo-char:nth-child(7) { animation-delay: 0.7s; }
+        .logo-char:nth-child(8) { animation-delay: 0.8s; }
+        .logo-char:nth-child(9) { animation-delay: 0.9s; }
+        .logo-char:nth-child(10) { animation-delay: 1.0s; }
+        .logo-char:nth-child(11) { animation-delay: 1.1s; }
+        .logo-char:nth-child(12) { animation-delay: 1.2s; }
+
+        @keyframes fadeInChar {
+            from { opacity: 0; transform: translateY(10px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* 移除旧的 .header h1, h4 样式，或注释掉 */
+        /*
         .header h1 {
             font-size: 2.5em;
             font-weight: 700;
@@ -104,6 +158,7 @@
         .header h4:hover {
             transform: scale(1.1);
         }
+        */
 
         @keyframes slideUp {
             from { transform: translateY(20px); opacity: 0; }
@@ -112,19 +167,26 @@
 
         /* 中间精选框 */
         .feature-box {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(15px);
-            border-radius: 25px;
-            padding: 25px;
+            background: rgba(0, 0, 0, 0.15); /* Slightly more transparent */
+            backdrop-filter: blur(18px); /* Increased blur */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px; /* Slightly more rounded */
+            padding: 30px; /* Increased padding */
             max-width: 800px;
             width: 85%;
             text-align: center;
             color: #fff;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35); /* Enhanced shadow */
             animation: floatIn 1s ease-in-out;
             z-index: 1;
             position: relative;
             overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease; /* Added transition for hover */
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px); /* Subtle lift on hover */
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.45);
         }
 
         .feature-box::before {
@@ -172,12 +234,13 @@
             justify-content: center;
         }
 
-        .feature-btn {
+          .feature-btn {
             width: 200px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05); /* Slightly more transparent base */
+            backdrop-filter: blur(12px); /* Increased blur for better glass effect */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+            border-radius: 15px; /* Slightly more rounded */
             text-align: center;
             color: #fff;
             text-decoration: none;
@@ -185,152 +248,311 @@
             font-weight: 600;
             position: relative;
             overflow: hidden;
-            transition: all 0.4s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Softer shadow */
         }
 
         .feature-btn:hover {
-            transform: translateY(-8px) scale(1.05);
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 255, 255, 0.6);
+            transform: translateY(-10px) scale(1.08); /* More pronounced hover effect */
+            background: rgba(255, 255, 255, 0.15); /* Brighter on hover */
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3), 0 0 25px rgba(255, 255, 255, 0.5);
         }
 
         .feature-btn::after {
-            content: '';
+            content:
             position: absolute;
-            top: 0;
-            left: -150%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-            transition: all 0.6s ease;
+            top: 50%;
+            left: 50%;
+            width: 300%; /* Larger shine element */
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0;
         }
 
         .feature-btn:hover::after {
-            left: 150%;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s ease-out;
         }
 
-        /* Dock栏 */
+         /* Dock栏 - Enhanced Glassmorphism and macOS 15 Style Animation */
         .dock {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 15px;
+            background: rgba(40, 42, 48, 0.65); /* Darker, slightly desaturated base for macOS feel */
+            backdrop-filter: blur(26px); /* Stronger, clearer blur */
+            -webkit-backdrop-filter: blur(26px);
+            border-radius: 26px; /* macOS like rounded corners */
+            padding: 10px; /* Compact padding */
             display: flex;
-            gap: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            margin-bottom: 20px;
+            justify-content: center; /* Center icons if not full width */
+            align-items: flex-end; /* Align items to bottom for scaling effect */
+            gap: 12px; /* Spacing between icons */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),
+                        inset 0 1px 0px rgba(255,255,255,0.12), /* Top inner highlight */
+                        0 0 0 0.5px rgba(0,0,0,0.7); /* Subtle outer border */
+            margin-bottom: 22px;
             z-index: 1000;
-            animation: dockSlide 1s ease-in-out;
+            animation: dockSlideUp 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.1s forwards; /* Smoother, more elastic slide up */
+            opacity: 0;
+            transform: translateY(100px) scale(0.9);
+            position: relative; /* For active indicator positioning */
+            /* Ensure it doesn't exceed viewport width on smaller screens if icons are many */
+            max-width: calc(100% - 40px); /* Example: leave some padding */
+            overflow: visible; /* Allow icons to expand vertically, may affect horizontal scroll if many icons */
         }
 
-        @keyframes dockSlide {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        @keyframes dockSlideUp {
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
         }
 
         .dock-btn {
-            width: 70px;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            width: 60px;
+            height: 60px;
+            background: transparent; /* Icons usually don't have a strong background in macOS dock */
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.4s ease;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), margin 0.2s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth transform and margin for spacing effect */
             position: relative;
             cursor: pointer;
-            overflow: hidden;
-        }
-
-        .dock-btn:hover {
-            transform: scale(1.3) translateY(-15px);
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+            will-change: transform; /* Optimize for transform animations */
         }
 
         .dock-btn img {
-            width: 50px;
-            height: 50px;
-            transition: transform 0.4s ease;
+            width: 48px;
+            height: 48px;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px; /* Slight rounding for icons if they are square */
+        }
+
+        /* macOS-like hover and active scaling */
+        .dock-btn:hover {
+            transform: scale(1.55) translateY(-18px); /* Significant scale and lift */
+            margin-left: 8px; /* Create space from neighbors */
+            margin-right: 8px;
+            z-index: 1001; /* Ensure hovered icon is above others */
+        }
+
+        .dock-btn:hover + .dock-btn {
+            transform: scale(1.25) translateY(-10px); /* Adjacent icons react */
+        }
+
+        .dock-btn:has(+ .dock-btn:hover) { /* Previous sibling of hovered icon */
+             transform: scale(1.25) translateY(-10px);
         }
 
         .dock-btn:hover img {
-            transform: rotate(15deg) scale(1.1);
+            transform: scale(1.05); /* Slight image scale on hover */
         }
 
-        .dock-btn::before {
+        /* Active indicator dot (macOS style) */
+        .dock-btn.active::after, .dock-btn:active::after {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.4), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: -1;
+            bottom: -8px; /* Position below the icon */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 3px rgba(255,255,255,0.5);
+            animation: fadeInDot 0.3s ease-out;
         }
 
-        .dock-btn:hover::before {
-            opacity: 1;
+        @keyframes fadeInDot {
+            from { opacity: 0; transform: translateX(-50%) scale(0.5); }
+            to { opacity: 1; transform: translateX(-50%) scale(1); }
         }
 
         /* 炫酷警告风格弹窗 */
         .modal {
-            display: none;
+            display: none; /* Initially hidden, controlled by JS */
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 2000;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.75); /* Darker overlay for more focus */
+            backdrop-filter: blur(8px); /* Apply blur to the overlay itself */
+            -webkit-backdrop-filter: blur(8px);
+            opacity: 0; /* Start hidden for entry animation */
+            animation: fadeInModalOverlay 0.4s ease-out forwards;
+            transition: opacity 0.4s ease-out; /* For JS-controlled fade-out if needed */
+        }
+
+        @keyframes fadeInModalOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(0, 0, 0, 0.8));
-            backdrop-filter: blur(20px);
-            padding: 30px;
-            border-radius: 20px;
+            /* transform: translate(-50%, -50%) scale(1); Will be controlled by animation */
+            background: linear-gradient(145deg, rgba(40, 0, 0, 0.7), rgba(15, 0, 0, 0.9)); /* Darker, richer red gradient */
+            backdrop-filter: blur(28px); /* Stronger glass effect for the content */
+            -webkit-backdrop-filter: blur(28px);
+            padding: 35px 40px; /* More horizontal padding */
+            border-radius: 24px; /* Smoother radius */
             text-align: center;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.7), 0 0 60px rgba(255, 0, 0, 0.3);
-            max-width: 450px;
-            width: 80%;
-            animation: warningPulse 1.5s ease-in-out infinite, dropIn 0.5s ease-out;
-            border: 2px solid rgba(255, 0, 0, 0.5);
+            box-shadow: 0 10px 50px rgba(255, 30, 30, 0.5),
+                        0 0 80px rgba(255, 30, 30, 0.25),
+                        inset 0 1px 2px rgba(255,120,120,0.35); /* More refined shadow with inset highlight */
+            max-width: 500px; /* Slightly wider */
+            width: 88%;
+            animation: modalDropIn 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+                       modalPulseEffect 2.5s ease-in-out infinite 0.6s; /* Pulse starts after drop-in */
+            border: 1.5px solid rgba(255, 90, 90, 0.45); /* Slightly thicker, softer border */
+            color: #ffe0e0; /* Lighter text for better contrast on dark red */
+            opacity: 0; /* Start hidden for animation */
         }
 
-        @keyframes dropIn {
-            from { transform: translate(-50%, -60%) scale(0.9); opacity: 0; }
-            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        @keyframes modalDropIn {
+            0% { transform: translate(-50%, -70%) scale(0.85); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
-        @keyframes warningPulse {
-            0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 0, 0.7), 0 0 60px rgba(255, 0, 0, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(255, 0, 0, 1), 0 0 80px rgba(255, 0, 0, 0.5); }
+        @keyframes modalPulseEffect {
+            0%, 100% {
+                box-shadow: 0 10px 50px rgba(255, 30, 30, 0.5),
+                            0 0 80px rgba(255, 30, 30, 0.25),
+                            inset 0 1px 2px rgba(255,120,120,0.35);
+            }
+            50% {
+                box-shadow: 0 12px 60px rgba(255, 60, 60, 0.7),
+                            0 0 100px rgba(255, 60, 60, 0.35),
+                            inset 0 1px 3px rgba(255,150,150,0.45);
+            }
         }
 
         .modal-content p {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #ff4500; /* 橙红色 */
-            text-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.4);
+            font-size: 1.2em; /* Adjusted for new padding */
+            font-weight: 500;
+            color: #ffc0c0; /* Softer, more readable red */
+            text-shadow: 0 0 10px rgba(255, 120, 120, 0.7), 0 1px 3px rgba(0,0,0,0.3);
+            line-height: 1.65;
         }
 
         @media (max-width: 768px) {
-            .header h1 { font-size: 2em; padding: 10px 20px; }
-            .header h4 { font-size: 1.1em; padding: 6px 15px; }
-            .feature-box { width: 90%; padding: 15px; }
-            .feature-box h2 { font-size: 1.6em; }
-            .feature-btn { width: 150px; font-size: 0.9em; }
-            .dock { padding: 10px; gap: 15px; }
-            .dock-btn { width: 60px; height: 60px; }
-            .dock-btn img { width: 40px; height: 40px; }
-            .modal-content { width: 90%; padding: 20px; }
-            .modal-content p { font-size: 1.1em; }
+            body {
+                font-size: 14px; /* Adjust base font size for smaller screens */
+            }
+            #animated-logo-container {
+                font-size: 1.8em; /* Smaller logo */
+                padding: 10px 20px;
+            }
+            .feature-box {
+                width: 90%;
+                padding: 20px; /* Adjusted padding */
+            }
+            .feature-box h2 {
+                font-size: 1.8em; /* Adjusted for new logo size */
+            }
+            .feature-box p {
+                font-size: 1em;
+                margin-bottom: 20px;
+            }
+            .button-container {
+                gap: 15px; /* Smaller gap */
+            }
+            .feature-btn {
+                width: calc(50% - 10px); /* Two buttons per row */
+                padding: 12px;
+                font-size: 0.9em;
+            }
+            .dock {
+                padding: 8px;
+                gap: 10px;
+                max-width: calc(100% - 20px); /* Ensure dock fits */
+                border-radius: 20px; /* Smaller radius for smaller dock */
+            }
+            .dock-btn {
+                width: 50px;
+                height: 50px;
+                border-radius: 12px;
+            }
+            .dock-btn img {
+                width: 38px;
+                height: 38px;
+                border-radius: 8px;
+            }
+            .dock-btn:hover {
+                transform: scale(1.4) translateY(-12px); /* Adjusted hover for smaller dock */
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+            .dock-btn:hover + .dock-btn,
+            .dock-btn:has(+ .dock-btn:hover) {
+                transform: scale(1.2) translateY(-8px);
+            }
+            .dock-btn.active::after, .dock-btn:active::after {
+                bottom: -6px; /* Adjust dot position */
+                width: 5px;
+                height: 5px;
+            }
+            .modal-content {
+                width: 90%;
+                padding: 25px 20px; /* Adjusted padding */
+            }
+            .modal-content p {
+                font-size: 1.1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #animated-logo-container {
+                font-size: 1.5em; /* Even smaller logo for very small screens */
+                padding: 8px 15px;
+            }
+            .feature-box h2 {
+                font-size: 1.6em;
+            }
+            .feature-box p {
+                font-size: 0.95em;
+            }
+            .feature-btn {
+                width: 100%; /* Full width buttons on very small screens */
+                margin-bottom: 10px;
+            }
+            .button-container {
+                flex-direction: column; /* Stack buttons */
+                gap: 10px;
+            }
+            .dock {
+                gap: 8px;
+                padding: 6px;
+                border-radius: 18px;
+            }
+            .dock-btn {
+                width: 45px;
+                height: 45px;
+                border-radius: 10px;
+            }
+            .dock-btn img {
+                width: 32px;
+                height: 32px;
+                border-radius: 6px;
+            }
+             .dock-btn:hover {
+                transform: scale(1.3) translateY(-10px);
+            }
+            .dock-btn:hover + .dock-btn,
+            .dock-btn:has(+ .dock-btn:hover) {
+                transform: scale(1.15) translateY(-6px);
+            }
+            .modal-content p {
+                font-size: 1em;
+            }
         }
     </style>
 </head>
@@ -338,8 +560,9 @@
     <div id="particles"></div>
 
     <div class="header">
-        <h1>欢迎访问主页</h1>
-        <h4>Welcome to the homepage</h4>
+        <div id="animated-logo-container">
+            <span class="logo-char">三</span><span class="logo-char">个</span><span class="logo-char">和</span><span class="logo-char">尚</span><span class="logo-char">网</span><span class="logo-char">络</span><span class="logo-char">技</span><span class="logo-char">术</span><span class="logo-char">有</span><span class="logo-char">限</span><span class="logo-char">公</span><span class="logo-char">司</span>
+        </div>
     </div>
 
     <div class="feature-box">
@@ -430,26 +653,66 @@
         // 弹窗控制
         const modal = document.getElementById('modal');
         window.onload = function() {
-            modal.style.display = 'block';
+            if (!localStorage.getItem('hasVisitedBefore')) {
+                modal.style.display = 'block';
+                localStorage.setItem('hasVisitedBefore', 'true');
+            }
         };
 
         modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
+            if (e.target === modal || e.target.closest('.modal-content')) { // Allow clicking inside modal content without closing
+                // To close by clicking outside, check if e.target is modal itself
+                if (e.target === modal) {
+                  modal.style.display = 'none';
+                }
             }
         });
 
-        // 禁用右键和开发者工具
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener("keydown", function (event) {
-            if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
-                event.preventDefault();
-                alert("源码保护，禁止查看！");
+        // 禁用右键和开发者工具 & 基础反爬虫/插件检测
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. 基础爬虫UA检测
+            const botPattern = /(bot|crawl|spider|slurp|ia_archiver|googlebot|bingbot|duckduckbot|yandexbot|baidu)/i;
+            if (botPattern.test(navigator.userAgent)) {
+                console.warn("Potential bot detected. Some functionalities might be limited.");
+                // Optionally, you could redirect or show a message, but be careful with user experience.
+                // document.body.innerHTML = "<h1>Access Denied for Automated Scripts</h1>";
             }
-            if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
-                event.preventDefault();
-                alert("源码保护，禁止查看！");
+
+            // 2. 基础插件/扩展检测 (very limited and unreliable)
+            // This is highly unreliable as extensions can hide their presence.
+            // Checking for a few known global variables some extensions might inject.
+            if (window.extensionLoaded || window.someSpecificExtensionApi) {
+                console.warn("Some browser extensions detected. This might affect page performance or functionality.");
+                // It's generally not recommended to block users based on this.
             }
+
+            // 3. 禁用右键菜单
+            document.addEventListener("contextmenu", function(event) {
+                event.preventDefault();
+            });
+
+            // 4. 禁用特定快捷键 (F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S)
+            document.addEventListener("keydown", function(event) {
+                const forbiddenKeys = [
+                    "F12",
+                    (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "i" || event.key === "J" || event.key === "j" || event.key === "C" || event.key === "c")),
+                    (event.ctrlKey && (event.key === "U" || event.key === "u")),
+                    (event.ctrlKey && (event.key === "S" || event.key === "s"))
+                ];
+
+                if (forbiddenKeys.some(condition => condition)) {
+                    event.preventDefault();
+                    // Consider a less intrusive notification or logging instead of an alert
+                    // console.warn("Developer tools or source view access is restricted.");
+                    // For demonstration, keeping the alert as per original code, but it's disruptive.
+                    alert("此功能已被禁用以保护页面内容。");
+                }
+            });
+
+            // 5. 防止内容被简单选中复制 (CSS part)
+            // Added 'user-select: none;' to body style in CSS if full page protection is desired
+            // Or apply to specific sensitive content containers.
+            // document.body.style.userSelect = "none"; // Example, can be disruptive
         });
     </script>
 </body>

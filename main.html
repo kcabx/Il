@@ -66,6 +66,8 @@
         <span id="span_dt_dt"></span>
     </p>
 
+    <audio id="bg-music" src="./music/能有什么阻挡.mp3" loop></audio>
+
     <script>
         var S = {
             init: function () {
@@ -609,6 +611,24 @@
             };
         }());
         S.init();
+                // 音乐控制
+        const audio = document.getElementById('bg-music');
+        audio.volume = 0.5;
+        let isMuted = false;
+
+        // 尝试自动播放，处理浏览器限制
+        function initAudio() {
+            audio.play().then(() => {
+                console.log("音乐播放成功");
+            }).catch(e => {
+                console.log("自动播放失败:", e);
+                document.addEventListener('click', function startAudio() {
+                    audio.play();
+                    document.removeEventListener('click', startAudio);
+                }, { once: true });
+            });
+        }
+        initAudio();
     </script>
 
     <script>
@@ -651,25 +671,53 @@
         }
 
         setInterval(draw, 33);
-        // 禁用右键菜单
-document.addEventListener('contextmenu', event => event.preventDefault());
+        // 禁用右键和开发者工具 & 基础反爬虫/插件检测
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. 基础爬虫UA检测
+            const botPattern = /(bot|crawl|spider|slurp|ia_archiver|googlebot|bingbot|duckduckbot|yandexbot|baidu)/i;
+            if (botPattern.test(navigator.userAgent)) {
+                console.warn("Potential bot detected. Some functionalities might be limited.");
+                // Optionally, you could redirect or show a message, but be careful with user experience.
+                // document.body.innerHTML = "<h1>Access Denied for Automated Scripts</h1>";
+            }
 
-// 禁用F12、Ctrl+Shift+I、Ctrl+Shift+J、Ctrl+U
-document.addEventListener("keydown", function (event) {
-    if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S")) {
-        event.preventDefault();
-        alert("源码保护，禁止查看！");
-    }
-    if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J"))) {
-        event.preventDefault();
-        alert("源码保护，禁止查看！");
-    }
-});
+            // 2. 基础插件/扩展检测 (very limited and unreliable)
+            // This is highly unreliable as extensions can hide their presence.
+            // Checking for a few known global variables some extensions might inject.
+            if (window.extensionLoaded || window.someSpecificExtensionApi) {
+                console.warn("Some browser extensions detected. This might affect page performance or functionality.");
+                // It's generally not recommended to block users based on this.
+            }
+
+            // 3. 禁用右键菜单
+            document.addEventListener("contextmenu", function(event) {
+                event.preventDefault();
+            });
+
+            // 4. 禁用特定快捷键 (F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S)
+            document.addEventListener("keydown", function(event) {
+                const forbiddenKeys = [
+                    "F12",
+                    (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "i" || event.key === "J" || event.key === "j" || event.key === "C" || event.key === "c")),
+                    (event.ctrlKey && (event.key === "U" || event.key === "u")),
+                    (event.ctrlKey && (event.key === "S" || event.key === "s"))
+                ];
+
+                if (forbiddenKeys.some(condition => condition)) {
+                    event.preventDefault();
+                    // Consider a less intrusive notification or logging instead of an alert
+                    // console.warn("Developer tools or source view access is restricted.");
+                    // For demonstration, keeping the alert as per original code, but it's disruptive.
+                    alert("此功能已被禁用以保护页面内容。");
+                }
+            });
+
+            // 5. 防止内容被简单选中复制 (CSS part)
+            // Added 'user-select: none;' to body style in CSS if full page protection is desired
+            // Or apply to specific sensitive content containers.
+            // document.body.style.userSelect = "none"; // Example, can be disruptive
+        });
     </script>
-
-    <audio autoplay="autoplay" loop="loop" muted="muted">
-        <source src="D:/Users/19539/Music/%E5%94%AF%E4%B8%80.mp3" type="audio/mpeg">
-    </audio>
 </body>
 
 </html>

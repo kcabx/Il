@@ -434,6 +434,11 @@
             <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/12.mp4" type="video/mp4"></video></div>
             <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/13.mp4" type="video/mp4"></video></div>
             <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/14.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/15.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/16.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/17.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/18.mp4" type="video/mp4"></video></div>
+            <div class="media-item video-item"><video muted autoplay loop playsinline><source src="../video/19.mp4" type="video/mp4"></video></div>
         </div>
     </div>
 
@@ -659,14 +664,69 @@
             });
         });
 
-        // 屏蔽开发者工具
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S') ||
-                e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) {
-                e.preventDefault();
-                alert('源码保护，禁止查看！');
+        // 弹窗控制
+        const modal = document.getElementById('modal');
+        window.onload = function() {
+            if (!localStorage.getItem('hasVisitedBefore')) {
+                modal.style.display = 'block';
+                localStorage.setItem('hasVisitedBefore', 'true');
             }
+        };
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal || e.target.closest('.modal-content')) { // Allow clicking inside modal content without closing
+                // To close by clicking outside, check if e.target is modal itself
+                if (e.target === modal) {
+                  modal.style.display = 'none';
+                }
+            }
+        });
+
+        // 禁用右键和开发者工具 & 基础反爬虫/插件检测
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. 基础爬虫UA检测
+            const botPattern = /(bot|crawl|spider|slurp|ia_archiver|googlebot|bingbot|duckduckbot|yandexbot|baidu)/i;
+            if (botPattern.test(navigator.userAgent)) {
+                console.warn("Potential bot detected. Some functionalities might be limited.");
+                // Optionally, you could redirect or show a message, but be careful with user experience.
+                // document.body.innerHTML = "<h1>Access Denied for Automated Scripts</h1>";
+            }
+
+            // 2. 基础插件/扩展检测 (very limited and unreliable)
+            // This is highly unreliable as extensions can hide their presence.
+            // Checking for a few known global variables some extensions might inject.
+            if (window.extensionLoaded || window.someSpecificExtensionApi) {
+                console.warn("Some browser extensions detected. This might affect page performance or functionality.");
+                // It's generally not recommended to block users based on this.
+            }
+
+            // 3. 禁用右键菜单
+            document.addEventListener("contextmenu", function(event) {
+                event.preventDefault();
+            });
+
+            // 4. 禁用特定快捷键 (F12, Ctrl+Shift+I/J/C, Ctrl+U, Ctrl+S)
+            document.addEventListener("keydown", function(event) {
+                const forbiddenKeys = [
+                    "F12",
+                    (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "i" || event.key === "J" || event.key === "j" || event.key === "C" || event.key === "c")),
+                    (event.ctrlKey && (event.key === "U" || event.key === "u")),
+                    (event.ctrlKey && (event.key === "S" || event.key === "s"))
+                ];
+
+                if (forbiddenKeys.some(condition => condition)) {
+                    event.preventDefault();
+                    // Consider a less intrusive notification or logging instead of an alert
+                    // console.warn("Developer tools or source view access is restricted.");
+                    // For demonstration, keeping the alert as per original code, but it's disruptive.
+                    alert("此功能已被禁用以保护页面内容。");
+                }
+            });
+
+            // 5. 防止内容被简单选中复制 (CSS part)
+            // Added 'user-select: none;' to body style in CSS if full page protection is desired
+            // Or apply to specific sensitive content containers.
+            // document.body.style.userSelect = "none"; // Example, can be disruptive
         });
     </script>
 </body>

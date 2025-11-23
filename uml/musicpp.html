@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魔幻光柱音频频谱</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #1a1a1a;
+            overflow: hidden;
+        }
+        #canvas {
+            width: 100%;
+            height: 100%;
+            max-width: 800px;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        .button-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .glass-button {
+            position: relative;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        .glass-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .glass-button:active {
+            transform: scale(0.95);
+        }
+        .glass-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+        .glass-button:hover::before {
+            left: 100%;
+        }
+        #audioInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <label for="audioInput" class="glass-button">选择音频</label>
+        <button id="micButton" class="glass-button">使用麦克风</button>
+    </div>
+    <input type="file" id="audioInput" accept="audio/*">
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const audioInput = document.getElementById('audioInput');
+        const micButton = document.getElementById('micButton');
+
+        let audioContext, analyser, source, frequencyData;
+        const bars = 64; // 光柱数量
+        const barWidth = 8; // 光柱宽度
+        let barSpacing = 4; // 光柱间距
+
+        // 自适应Canvas尺寸
+        function resizeCanvas() {
+            canvas.width = Math.min(window.innerWidth * 0.9, 800);
+            canvas.height = Math.min(window.innerHeight * 0.5, 400);
+            barSpacing = (canvas.width / bars) - barWidth;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 初始化音频上下文
+        function initAudio() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256; // 频率分辨率
+            frequencyData = new Uint8Array(analyser.frequencyBinCount);
+        }
+
+        // 播放音频文件
+        audioInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const audio = new Audio(URL.createObjectURL(file));
+            audio.play();
+            if (!audioContext) initAudio();
+
+            source = audioContext.createMediaElementSource(audio);
+            source.connect(analyser);
+            // analyser.connect(audioContext.destination);
+            animate();
+        });
+
+        // 使用麦克风
+        micButton.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                if (!audioContext) initAudio();
+
+                source = audioContext.createMediaStreamSource(stream);
+                source.connect(analyser);
+                // analyser.connect(audioContext.destination);
+                animate();
+            } catch (err) {
+                console.error('麦克风访问失败:', err);
+            }
+        });
+
+        // 动态渐变色
+        function getGradientColor(index, time) {
+            const hue = (index * 5 + time * 0.1) % 360;
+            return `hsl(${hue}, 80%, 60%)`;
+        }
+
+        // 动画绘制
+        function animate() {
+            analyser.getByteFrequencyData(frequencyData);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const time = Date.now() * 0.05;
+            for (let i = 0; i < bars; i++) {
+                const value = frequencyData[i] / 256; // 频率值归一化
+                const barHeight = value * canvas.height * 0.8;
+
+                const x = i * (barWidth + barSpacing);
+                const y = canvas.height - barHeight;
+
+                // 创建渐变
+                const gradient = ctx.createLinearGradient(x, canvas.height, x, y);
+                gradient.addColorStop(0, getGradientColor(i, time));
+                gradient.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
+
+                // 绘制圆顶光柱
+                ctx.beginPath();
+                ctx.moveTo(x, canvas.height);
+                ctx.lineTo(x, y + barWidth / 2); // 底部到圆弧起点
+                ctx.arc(x + barWidth / 2, y + barWidth / 2, barWidth / 2, Math.PI, 0); // 顶部圆弧
+                ctx.lineTo(x + barWidth, canvas.height); // 回到底部
+                ctx.closePath();
+
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                // 添加光晕效果
+                ctx.fillStyle = `rgba(255, 255, 255, ${value * 0.3})`;
+                ctx.fill();
+            }
+
+            requestAnimationFrame(animate);
+        }
+    </script>
+</body>
+</html>

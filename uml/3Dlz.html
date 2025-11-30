@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>3D 手势粒子交互 - 高性能版</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #000; }
+        canvas { display: block; }
+        #loading {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; font-family: sans-serif; pointer-events: none;
+            text-align: center;
+        }
+        /* 隐藏原始视频，我们只需要数据 */
+        .input_video { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="loading">正在加载 AI 模型和摄像头...<br>首次加载可能较慢</div>
+    <video class="input_video"></video>
+
+    <!-- 引入 Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- 引入 MediaPipe Hands -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+    <!-- 顶点着色器 (Vertex Shader): 处理粒子位置 -->
+    <script type="x-shader/x-vertex" id="vertexshader">
+        uniform float uTime;
+        uniform vec3 uMouse; // 手的位置 (x, y, depth)
+        uniform float uHover; // 是否检测到手 (0.0 或 1.0)
+
+        attribute float aSize;
+        attribute vec3 aRandom;
+
+        varying vec3 vColor;
+
+        void main() {
+            vec3 pos = position;
+
+            // 基础动画：让粒子轻微浮动
+            pos.x += sin(uTime * aRandom.x + position.y) * 0.2;
+            pos.y += cos(uTime * aRandom.y + position.x) * 0.2;
+
+            // --- 交互核心逻辑 ---
+            // 计算粒子与手的距离
+            float dist = distance(pos.xy, uMouse.xy);
+            float radius = 8.0; // 交互半径
+
+            // 如果手存在且距离够近
+            if(uHover > 0.5 && dist < radius) {
+                // 计算斥力方向
+                vec3 dir = normalize(pos - uMouse);
+                float force = (radius - dist) / radius; // 距离越近力越大
+
+                // 粒子向外推开，包含 Z 轴的立体推开
+                pos += dir * force * 8.0;
+            }
+
+            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+            gl_PointSize = aSize * (20.0 / -mvPosition.z); // 透视大小
+            gl_Position = projectionMatrix * mvPosition;
+
+            // 颜色根据深度变化
+            vColor = vec3(0.2, 0.6, 1.0) + pos.z * 0.05;
+        }
+    </script>
+
+    <!-- 片元着色器 (Fragment Shader): 处理粒子颜色 -->
+    <script type="x-shader/x-fragment" id="fragmentshader">
+        varying vec3 vColor;
+        void main() {
+            // 制作圆形粒子
+            float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+            if (r > 0.5) discard;
+
+            // 简单的光晕效果
+            float glow = 1.0 - (r * 2.0);
+            gl_FragColor = vec4(vColor * glow, 1.0);
+        }
+    </script>
+
+    <script>
+        // --- 全局变量 ---
+        let camera, scene, renderer;
+        let material, particles;
+        const videoElement = document.getElementsByClassName('input_video')[0];
+
+        // 目标手势位置 (平滑过渡用)
+        const targetPos = new THREE.Vector3(0, 0, 0);
+        // 当前Shader中用的位置
+        const currentPos = new THREE.Vector3(0, 0, 0);
+        let isHandDetected = 0.0;
+
+        initThreeJS();
+        initMediaPipe();
+        animate();
+
+        function initThreeJS() {
+            // 1. 场景设置
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000000, 0.02);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true }); // 抗锯齿
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 高分屏适配
+            document.body.appendChild(renderer.domElement);
+
+            // 2. 创建粒子几何体
+            const particleCount = 15000; // 粒子数量，手机端可适当减少
+            const geometry = new THREE.BufferGeometry();
+            const positions = [];
+            const sizes = [];
+            const randoms = [];
+
+            for (let i = 0; i < particleCount; i++) {
+                // 随机分布在一个立方体内
+                positions.push((Math.random() * 2 - 1) * 40);
+                positions.push((Math.random() * 2 - 1) * 30);
+                positions.push((Math.random() * 2 - 1) * 20);
+
+                sizes.push(Math.random() * 2.0);
+                randoms.push(Math.random(), Math.random(), Math.random());
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute('aSize', new THREE.Float32BufferAttribute(sizes, 1));
+            geometry.setAttribute('aRandom', new THREE.Float32BufferAttribute(randoms, 3));
+
+            // 3. 创建 Shader 材质
+            material = new THREE.ShaderMaterial({
+                uniforms: {
+                    uTime: { value: 0 },
+                    uMouse: { value: new THREE.Vector3(0, 0, 0) },
+                    uHover: { value: 0.0 }
+                },
+                vertexShader: document.getElementById('vertexshader').textContent,
+                fragmentShader: document.getElementById('fragmentshader').textContent,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                depthTest: false
+            });
+
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            // 适配窗口变化
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // --- MediaPipe 手势识别设置 ---
+        function initMediaPipe() {
+            const hands = new Hands({locateFile: (file) => {
+                return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+            }});
+
+            hands.setOptions({
+                maxNumHands: 1,
+                modelComplexity: 1, // 1为性能与精度的平衡，0最快
+                minDetectionConfidence: 0.5,
+                minTrackingConfidence: 0.5
+            });
+
+            hands.onResults(onResults);
+
+            // 启动摄像头
+            const cameraUtils = new Camera(videoElement, {
+                onFrame: async () => {
+                    await hands.send({image: videoElement});
+                },
+                width: 640,
+                height: 480,
+                facingMode: "user" // 前置摄像头
+            });
+
+            cameraUtils.start()
+                .then(() => {
+                    document.getElementById('loading').style.display = 'none';
+                })
+                .catch(err => {
+                    document.getElementById('loading').innerText = "无法访问摄像头，请允许权限或使用HTTPS/Localhost";
+                    console.error(err);
+                });
+        }
+
+        function onResults(results) {
+            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                const landmarks = results.multiHandLandmarks[0];
+
+                // 获取食指指尖 (Index Finger Tip) - 索引为 8
+                // MediaPipe 坐标范围是 [0, 1]，左上角为(0,0)
+                const indexFinger = landmarks[8];
+
+                // 将 2D 屏幕坐标转换为 3D 场景坐标范围
+                // 注意：摄像头画面通常是镜像的，需要翻转 X 轴
+                const x = (1 - indexFinger.x) * 80 - 40; // 映射到场景宽度
+                const y = (1 - indexFinger.y) * 60 - 30; // 映射到场景高度
+                // 使用 z 坐标模拟深度 (MediaPipe z 是相对值)
+                const z = indexFinger.z * -50;
+
+                targetPos.set(x, y, z);
+                isHandDetected = 1.0;
+            } else {
+                isHandDetected = 0.0;
+            }
+        }
+
+        // --- 渲染循环 ---
+        function animate() {
+            // 无论屏幕刷新率是多少，requestAnimationFrame 都会自动匹配 (120Hz, 144Hz 等)
+            requestAnimationFrame(animate);
+
+            const time = performance.now() * 0.001;
+
+            // 平滑插值：让粒子的跟随动作更柔和，不抖动
+            // Lerp (Linear Interpolation)
+            currentPos.lerp(targetPos, 0.1);
+
+            // 更新 Shader 变量
+            material.uniforms.uTime.value = time;
+            material.uniforms.uMouse.value.copy(currentPos);
+
+            // 平滑过渡检测状态
+            material.uniforms.uHover.value = THREE.MathUtils.lerp(material.uniforms.uHover.value, isHandDetected, 0.1);
+
+            // 缓慢旋转场景
+            particles.rotation.y = time * 0.05;
+
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>
